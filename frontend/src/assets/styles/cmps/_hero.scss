@@ -1,0 +1,21 @@
+.hero {
+    background-color: $main-bg-color;
+    flex-grow: 1;
+    border-bottom: 7px solid $main-notification-clr;
+
+    .hero-svg {
+        width: 50%;
+    }
+
+    .hero-txt {
+        margin-top: 15px;
+        .header {
+            font-size: 32px;
+        }
+
+        .sml-txt {
+            margin-top: 10px;
+            color: $main-icons-color;
+        }
+    }
+}

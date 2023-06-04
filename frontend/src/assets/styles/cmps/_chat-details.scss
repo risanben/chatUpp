@@ -1,0 +1,10 @@
+
+.chat-details{
+    background-color: $chat-bg-clr ;
+    flex-grow: 1;
+
+    .chat-header{
+        background-color: $main-bg-color;
+        height: 77px;
+    }
+}

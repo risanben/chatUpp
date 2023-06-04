@@ -1,5 +1,5 @@
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { loadChats, addCar, updateCar, removeCar, addToCart } from '../store/car.actions.js'
 
@@ -7,10 +7,13 @@ import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service.js'
 import { carService } from '../services/car.service.js'
 import { loadboard } from '../store/board.actions.js'
 import { ChatList } from '../cmps/chat-list.jsx'
+import { Hero } from '../cmps/hero.jsx'
+import { ChatDetails } from '../cmps/chat-details.jsx'
 
 export function ChatIndex() {
 
     const board = useSelector(storeState => storeState.carModule.board)
+    const [selectedChat, setSelectedChat] = useState(null)
 
     useEffect(() => {
         loadboard()
@@ -19,7 +22,7 @@ export function ChatIndex() {
     async function onRemoveCar(carId) {
         try {
             await removeCar(carId)
-            showSuccessMsg('Car removed')            
+            showSuccessMsg('Car removed')
         } catch (err) {
             showErrorMsg('Cannot remove car')
         }
@@ -33,7 +36,7 @@ export function ChatIndex() {
             showSuccessMsg(`Car added (id: ${savedCar._id})`)
         } catch (err) {
             showErrorMsg('Cannot add car')
-        }        
+        }
     }
 
     async function onUpdateCar(car) {
@@ -44,10 +47,10 @@ export function ChatIndex() {
             showSuccessMsg(`Car updated, new price: ${savedCar.price}`)
         } catch (err) {
             showErrorMsg('Cannot update car')
-        }        
+        }
     }
 
-    function onAddToCart(car){
+    function onAddToCart(car) {
         console.log(`Adding ${car.vendor} to Cart`)
         addToCart(car)
         showSuccessMsg('Added to Cart')
@@ -57,12 +60,17 @@ export function ChatIndex() {
         console.log(`TODO Adding msg to car`)
     }
 
+
     return (
         <div className='chat-index'>
             <div className='green-background'></div>
             <div className='grey-background'></div>
-            <main>
-                <ChatList/>
+            <main className='flex'>
+                {!!board[0]?.chats.length && <ChatList
+                    chats={board[0]?.chats}
+                    setSelectedChat={setSelectedChat}
+                />}
+                {selectedChat ? <ChatDetails chat={selectedChat} /> : <Hero />}
             </main>
             {/* <main>
                 <button onClick={onAddCar}>Add Car ⛐</button>

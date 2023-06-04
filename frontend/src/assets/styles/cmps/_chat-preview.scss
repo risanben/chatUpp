@@ -1,0 +1,30 @@
+.chat-preview {
+    color: inherit;
+    height: 85px;
+
+    &:hover {
+        background-color: $main-bg-color;
+        text-decoration: none;
+    }
+
+    .avatar-container {
+        width: 73px;
+    }
+
+    .txt-container {
+        border-bottom: 1px solid $main-bg-color;
+        flex-grow: 1;
+        margin-top: 5px;
+
+        &:hover {
+            border-bottom: none;
+        }
+
+        .user-name {
+            font-size: 22px;
+            color: black;
+        }
+    }
+
+
+}
