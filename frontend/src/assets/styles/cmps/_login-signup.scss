@@ -1,0 +1,78 @@
+.login-signup {
+    background-image: url(../../img/login-bg.jpg);
+    height: 100vh;
+
+
+
+    .login-container {
+        background-color: whitesmoke;
+        height: max-content;
+        width: 500px;
+        border-radius: 7px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        padding: 20px;
+        box-shadow: 0px 0px 8px 5px rgba(0,73,57,0.68);
+
+
+        h1 {
+            margin-top: 80px;
+            margin-bottom: 40px;
+            font-family: inherit;
+            font-weight: 200;
+        }
+
+        .signup-section{
+            width: 100%;
+        }
+
+        form {
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        input {
+            border: 2px solid #00a884;
+            padding: 10px;
+            font-size: 1.2rem;
+            border-radius: 7px;
+            width: 90%;
+
+            &:focus {
+                outline: none;
+
+            }
+
+           &::placeholder {
+                color: #00a884;
+            }
+        }
+
+        button {
+            background-color: #00a884;
+            width: 90%;
+            border: none;
+            color: white;
+            padding: 15px;
+            border-radius: 2rem;
+            font-size: 20px;
+
+            &:hover {
+                background-color: #026852;
+            }
+        }
+
+
+
+
+        .membership-status {
+            justify-self: end;
+            margin-bottom: 10px;
+            margin-top: 40px;
+
+            span{
+                color: #026852;
+                font-weight: 600;
+            }
+        }
+    }
+}

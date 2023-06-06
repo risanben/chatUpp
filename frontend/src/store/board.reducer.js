@@ -14,7 +14,7 @@ const initialState = {
     lastRemovedCar: null
 }
 
-export function carReducer(state = initialState, action) {
+export function boardReducer(state = initialState, action) {
     var newState = state
     var cars
     var cart

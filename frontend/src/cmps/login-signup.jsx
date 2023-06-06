@@ -50,48 +50,13 @@ export function LoginSignup(props) {
     }
 
     return (
-        <div className="login-page">
-            <p>
-                <button className="btn-link" onClick={toggleSignup}>{!isSignup ? 'Signup' : 'Login'}</button>
-            </p>
-            {!isSignup && <form className="login-form" onSubmit={onLogin}>
-                <select
-                    name="username"
-                    value={credentials.username}
-                    onChange={handleChange}
-                >
-                    <option value="">Select User</option>
-                    {users.map(user => <option key={user._id} value={user.username}>{user.fullname}</option>)}
-                </select>
-                {/* <input
-                        type="text"
-                        name="username"
-                        value={username}
-                        placeholder="Username"
-                        onChange={handleChange}
-                        required
-                        autoFocus
-                    />
-                    <input
-                        type="password"
-                        name="password"
-                        value={password}
-                        placeholder="Password"
-                        onChange={handleChange}
-                        required
-                    /> */}
-                <button>Login!</button>
-            </form>}
-            <div className="signup-section">
-                {isSignup && <form className="signup-form" onSubmit={onSignup}>
-                    <input
-                        type="text"
-                        name="fullname"
-                        value={credentials.fullname}
-                        placeholder="Fullname"
-                        onChange={handleChange}
-                        required
-                    />
+        <div className="login-signup flex justify-center align-center">
+
+            <div className="login-container flex column align-center">
+                <h1>{!isSignup ? 'Login' : 'Signup'}</h1>
+
+
+                {!isSignup && <form className="login-form flex column align-center " onSubmit={onLogin}>
                     <input
                         type="text"
                         name="username"
@@ -99,6 +64,7 @@ export function LoginSignup(props) {
                         placeholder="Username"
                         onChange={handleChange}
                         required
+                        autoFocus
                     />
                     <input
                         type="password"
@@ -108,9 +74,41 @@ export function LoginSignup(props) {
                         onChange={handleChange}
                         required
                     />
-                    <ImgUploader onUploaded={onUploaded} />
-                    <button >Signup!</button>
+                    <button className='pointer'>Login</button>
                 </form>}
+
+
+                <div className="signup-section flex column align-center">
+                    {isSignup && <form className="signup-form flex column align-center" onSubmit={onSignup}>
+                        <input
+                            type="text"
+                            name="fullname"
+                            value={credentials.fullname}
+                            placeholder="Fullname"
+                            onChange={handleChange}
+                            required
+                        />
+                        <input
+                            type="text"
+                            name="username"
+                            value={credentials.username}
+                            placeholder="Username"
+                            onChange={handleChange}
+                            required
+                        />
+                        <input
+                            type="password"
+                            name="password"
+                            value={credentials.password}
+                            placeholder="Password"
+                            onChange={handleChange}
+                            required
+                        />
+                        <ImgUploader onUploaded={onUploaded} />
+                        <button >Signup</button>
+                    </form>}
+                </div>
+                <div className="membership-status " onClick={toggleSignup}>{!isSignup ? <section>Not a memeber yet? <span className='pointer'>Sign Up</span></section>: 'Login'}</div>
             </div>
         </div>
     )

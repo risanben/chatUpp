@@ -11,16 +11,18 @@ import { Hero } from '../cmps/hero.jsx'
 import { ChatDetails } from '../cmps/chat-details.jsx'
 import { utilService } from '../services/util.service.js'
 import { boardService } from '../services/board.service.local.js'
+import { LoginSignup } from '../cmps/login-signup.jsx'
 
 export function ChatIndex() {
+    const user = useSelector(storeState => storeState.userModule.user)
+    const board = useSelector(storeState => storeState.boardModule.board)
 
-    const board = useSelector(storeState => storeState.carModule.board)
     const [selectedChat, setSelectedChat] = useState(null)
 
     useEffect(() => {
         loadboard('u101')
     }, [])
-    
+
     async function onAddMsg(msg) {
         let msgToSave = {
             content: msg,
@@ -40,7 +42,7 @@ export function ChatIndex() {
     }
 
 
-
+    if (!user) return <LoginSignup />
     if (!board) return 'loading...'
     return (
         <div className='chat-index'>
