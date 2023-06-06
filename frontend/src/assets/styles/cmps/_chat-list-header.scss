@@ -1,4 +1,13 @@
 .chat-list-header{
     height: 9%;
     background-color: $main-bg-color;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 100%;
+    justify-content: space-between;
+
+    .user-btns-container{
+        font-size: 30px;
+        opacity: 0.8;
+    }
 }

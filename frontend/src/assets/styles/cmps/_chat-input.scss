@@ -1,0 +1,36 @@
+.chat-input {
+    background-color: red;
+    justify-self: flex-end;
+    height: 77px;
+    background-color: $main-bg-color;
+
+    form {
+        flex-grow: 1;
+        height: 70%;
+  
+    }
+
+    input {
+        width: 100%;
+        height: 100%;
+        font-size: 20px;
+        padding: 0px 10px;
+        border: none;
+        background-color: #fff;
+        border-radius: 10px;
+        margin: 0 10px;
+        // border: 2px solid red;
+
+        &:focus {
+            outline: none;
+        }
+
+    }
+
+    .send-icon {
+        margin: 0 10px 0 20px;
+        font-size: 30px;
+        opacity: 0.8;
+    }
+
+}

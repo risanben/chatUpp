@@ -25,7 +25,7 @@ async function query(filterBy = { txt: '', price: 0 }) {
     // if (filterBy.price) {
     //     cars = cars.filter(car => car.price <= filterBy.price)
     // }
-    return cars
+    return chats
 }
 
 function getById(carId) {

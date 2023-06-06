@@ -54,6 +54,7 @@
     cursor: pointer;
 }
 
+
 // Media helpers
 
 .square-ratio {
@@ -67,3 +68,4 @@
 .portrait-ratio {
     @include aspect-ratio(9, 16);
 }
+

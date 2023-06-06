@@ -1,0 +1,12 @@
+
+
+.user-avatar{
+    // border: 1px solid red;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+
+    img{
+        border-radius: inherit;
+    }
+}

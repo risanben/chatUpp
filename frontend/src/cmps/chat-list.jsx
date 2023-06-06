@@ -5,7 +5,6 @@ import { ChatPreview } from "./chat-preview";
 
 export function ChatList({chats, setSelectedChat}) {
 
-
     return (
         <section className="chat-list">
             <ChatListHeader />

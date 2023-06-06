@@ -1,4 +1,5 @@
 export const SET_BOARD = 'SET_BOARD'
+export const UPDATE_BOARD = 'SET_BOARD'
 export const REMOVE_CAR = 'REMOVE_CAR'
 export const ADD_CAR = 'ADD_CAR'
 export const UPDATE_CAR = 'UPDATE_CAR'
@@ -8,7 +9,7 @@ export const UNDO_REMOVE_CAR = 'UNDO_REMOVE_CAR'
 export const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
 
 const initialState = {
-    board: [],
+    board: null,
     cart: [],
     lastRemovedCar: null
 }
@@ -19,6 +20,9 @@ export function carReducer(state = initialState, action) {
     var cart
     switch (action.type) {
         case SET_BOARD:
+            newState = { ...state, board: action.board }
+            break
+        case UPDATE_BOARD:
             newState = { ...state, board: action.board }
             break
         case REMOVE_CAR:

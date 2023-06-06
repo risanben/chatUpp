@@ -1,0 +1,25 @@
+.user-option-modal {
+    // border: 1px solid red;
+    padding: 10px 0;
+    width: 260px;
+    background-color: white;
+    position: absolute;
+    border-radius: 3px;
+    box-shadow: 0 2px 5px 0 rgba(11, 20, 26, .26), 0 2px 10px 0 rgba(11, 20, 26, .16);
+
+    :last-child {
+        // padding-bottom: 10px;
+    }
+
+    .optn-container {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 30px;
+        font-size: 17px;
+
+
+        &:hover {
+            background-color: $main-bg-color;
+        }
+    }
+}
