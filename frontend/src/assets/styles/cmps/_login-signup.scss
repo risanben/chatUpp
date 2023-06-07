@@ -11,7 +11,7 @@
         border-radius: 7px;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         padding: 20px;
-        box-shadow: 0px 0px 8px 5px rgba(0,73,57,0.68);
+        box-shadow: 0px 0px 8px 5px rgba(0, 73, 57, 0.68);
 
 
         h1 {
@@ -21,7 +21,7 @@
             font-weight: 200;
         }
 
-        .signup-section{
+        .signup-section {
             width: 100%;
         }
 
@@ -42,7 +42,7 @@
 
             }
 
-           &::placeholder {
+            &::placeholder {
                 color: #00a884;
             }
         }
@@ -69,10 +69,14 @@
             margin-bottom: 10px;
             margin-top: 40px;
 
-            span{
+            span {
                 color: #026852;
                 font-weight: 600;
             }
         }
+    }
+
+    .errors {
+        color: red;
     }
 }

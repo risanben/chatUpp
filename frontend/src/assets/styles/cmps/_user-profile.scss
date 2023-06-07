@@ -1,0 +1,38 @@
+.user-profile{
+    // border: 2px solid red;
+    // width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: $main-bg-color;
+    
+    header{
+        background-color:$main-border-dark-clr;
+        height: 160px;
+        padding-bottom: 20px;
+        padding-left: 30px;
+
+        .arrow-icon{
+            font-size: 30px;
+            color: white;
+            margin-bottom: 4px;
+        }
+
+        .head{
+            margin-left: 30px;
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+    }
+
+    .main-user-section{
+        height: 100%;
+        .user-img{
+            width: 15rem;
+            margin-top: 25px;
+        }
+    }
+}
+

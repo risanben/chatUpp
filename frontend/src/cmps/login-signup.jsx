@@ -22,6 +22,8 @@ export function LoginSignup(props) {
     }
 
     function handleChange(ev) {
+        console.log('props.isCredentialMatched:',props.isCredentialMatched )
+           if (!props.isCredentialMatched) props.setIsCredentialMatched(true)
         const field = ev.target.name
         const value = ev.target.value
         setCredentials({ ...credentials, [field]: value })
@@ -54,8 +56,6 @@ export function LoginSignup(props) {
 
             <div className="login-container flex column align-center">
                 <h1>{!isSignup ? 'Login' : 'Signup'}</h1>
-
-
                 {!isSignup && <form className="login-form flex column align-center " onSubmit={onLogin}>
                     <input
                         type="text"
@@ -76,6 +76,8 @@ export function LoginSignup(props) {
                     />
                     <button className='pointer'>Login</button>
                 </form>}
+                    {(!props.isCredentialMatched&& !isSignup) && <section className="errors">User name or password incorrect</section>}
+
 
 
                 <div className="signup-section flex column align-center">
@@ -104,11 +106,11 @@ export function LoginSignup(props) {
                             onChange={handleChange}
                             required
                         />
-                        <ImgUploader onUploaded={onUploaded} />
+                        {/* <ImgUploader onUploaded={onUploaded} /> */}
                         <button >Signup</button>
                     </form>}
                 </div>
-                <div className="membership-status " onClick={toggleSignup}>{!isSignup ? <section>Not a memeber yet? <span className='pointer'>Sign Up</span></section>: 'Login'}</div>
+                <div className="membership-status " onClick={toggleSignup}>{!isSignup ? <section>Not a memeber yet? <span className='pointer'>Sign Up</span></section> : <section>Or, <span className='pointer'>Login</span></section>}</div>
             </div>
         </div>
     )
