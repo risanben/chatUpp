@@ -37,9 +37,10 @@ function remove(userId) {
     // return httpService.delete(`user/${userId}`)
 }
 
-async function update({_id, score}) {
+async function update({_id, imgUrl}) {
+   
     const user = await storageService.get('user', _id)
-    user.score = score
+    user.imgUrl = imgUrl
     await storageService.put('user', user)
 
     // const user = await httpService.put(`user/${_id}`, {_id, score})
@@ -50,7 +51,7 @@ async function update({_id, score}) {
 
 async function login(userCred) {
     const users = await storageService.query('user')
-    console.log('users:', users)
+
     const user = users.find(user => user.username === userCred.username)
     // const user = await httpService.post('auth/login', userCred)
     console.log('user:', user)
@@ -85,7 +86,7 @@ async function changeScore(by) {
 
 
 function saveLocalUser(user) {
-    user = {_id: user._id, fullname: user.fullname, imgUrl: user.imgUrl}
+    user = {_id: user._id, fullname: user.fullname, imgUrl: user.imgUrl, username:user.username}
     sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
     return user
 }

@@ -29,9 +29,14 @@
 
     .main-user-section{
         height: 100%;
-        .user-img{
-            width: 15rem;
-            margin-top: 25px;
+  
+        .user-avatar{
+            margin-top: 50px;
+            border: 1px solid $main-border-dark-clr;
+        }
+
+        .img-input{
+            display: none;
         }
     }
 }

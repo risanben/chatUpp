@@ -36,7 +36,7 @@ export function ChatListHeader({ onLogout }) {
 
     return (
         <section className="chat-list-header flex align-center">
-            <UserAvatar imgUrl={loggedInUser.imgUrl} onToggleProfile={onToggleProfile} />
+            <UserAvatar imgUrl={loggedInUser.imgUrl} onToggleProfile={onToggleProfile} dimensions={{height:'50px', width:'50px'}} />
             <div className="user-btns-container pointer" onClick={toggleModal}>
                 <BiDotsVerticalRounded />
             </div>
