@@ -17,6 +17,19 @@ export const userService = {
 }
 
 window.userService = userService
+const USER_KEY = 'user'
+
+createDemoUsers()
+
+async function createDemoUsers(){
+    let users = await storageService.query('user')
+    if (!users.length){
+        users = demoUsers
+        storageService._save(USER_KEY, users)
+    }
+
+}
+
 
 
 function getUsers() {
@@ -37,10 +50,10 @@ function remove(userId) {
     // return httpService.delete(`user/${userId}`)
 }
 
-async function update({_id, imgUrl}) {
+async function update(userToUpdate, key) {
    
-    const user = await storageService.get('user', _id)
-    user.imgUrl = imgUrl
+    const user = await storageService.get('user',userToUpdate._id)
+    user[key] = userToUpdate[key]
     await storageService.put('user', user)
 
     // const user = await httpService.put(`user/${_id}`, {_id, score})
@@ -101,6 +114,33 @@ function getLoggedinUser() {
 //     await userService.signup({fullname: 'Master Adminov', username: 'admin', password:'123', score: 10000, isAdmin: true})
 //     await userService.signup({fullname: 'Muki G', username: 'muki', password:'123', score: 10000})
 // })()
+
+
+ const demoUsers = [
+    {
+        _id:'tGJgU',
+        fullname: 'ris benichou',
+        username: 'ris',
+        password:'ris',
+        imgUrl:'https://res.cloudinary.com/dcwibf9o5/image/upload/v1687174221/ozfn5c2uulrxaulrqoir.jpg'
+    },
+    {
+        _id:'qXJvh',
+        fullname: 'Mai Levi',
+        username: 'mai',
+        password:'mai',
+        imgUrl:'https://res.cloudinary.com/dcwibf9o5/image/upload/v1687174468/ijfmgo5brwhwk4gue92m.jpg'
+    },
+    {
+        _id:'iwrDv',
+        fullname: 'demo guest',
+        username: 'guest',
+        password:'guest',
+        imgUrl:'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
+    },
+]
+
+
 
 
 

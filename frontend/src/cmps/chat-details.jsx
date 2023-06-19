@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { MessageList } from "./message-list.jsx"
 import { ChatInput } from "./chat-input.jsx"
 
-export function ChatDetails({ chat, onAddMsg }) {
+export function ChatDetails({ chat, onAddMsg, userId }) {
 
 
 console.log('chat:', chat)
@@ -13,6 +13,7 @@ console.log('chat:', chat)
             </div>
             <MessageList
             messages = {chat.messages}
+            userId={userId}
             />
             <ChatInput onAddMsg={onAddMsg}/>
         </section>

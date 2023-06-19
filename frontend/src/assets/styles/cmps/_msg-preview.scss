@@ -7,12 +7,18 @@
     width: max-content;
     padding: 10px;
 
+    
+    &.self{
+        align-self: flex-end;
+        background-color: $self-msg-bg-clr;
+    }
+
     .msg-txt{
 
     }
 
     .msg-time{
         align-self: end;
-        font-size: 15px;
+        font-size: 13px;
     }
 }

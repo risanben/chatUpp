@@ -20,8 +20,8 @@ export function ChatIndex() {
     const [isCredentialMatched, setIsCredentialMatched] = useState(true)
     const [selectedChat, setSelectedChat] = useState(null)
 
-    useEffect(() => {
-        loadboard('u101')
+    useEffect(() => { 
+        if (user)loadboard(user._id)
     }, [])
 
     async function onLogin(credentials) {
@@ -35,16 +35,15 @@ export function ChatIndex() {
     }
 
     async function onAddMsg(msg) {
+ 
         let msgToSave = {
             content: msg,
             timestamp: Date.now(),
-            sender: 'guest',
+            sender: user._id,
             id: utilService.makeId()
         }
 
-        let boardToSave = { ...board }
-        let chatToSave = boardToSave.chats.find(chat => chat.id === selectedChat.id)
-        chatToSave.messages.push(msgToSave)
+        let boardToSave = boardService.addMsg(board,selectedChat, msgToSave)
         try {
             const savedBoard = updateBoard(boardToSave)
         } catch (err) {
@@ -73,6 +72,7 @@ export function ChatIndex() {
 
     if (!user) return <LoginSignup onSignup={onSignup} onLogin={onLogin} isCredentialMatched={isCredentialMatched} setIsCredentialMatched={setIsCredentialMatched}/>
     if (!board) return 'loading...'
+    console.log('currUser', user)
     return (
         <div className='chat-index'>
             <div className='green-background'></div>
@@ -83,7 +83,7 @@ export function ChatIndex() {
                     setSelectedChat={setSelectedChat}
                     onLogout={onLogout}
                 />}
-                {selectedChat ? <ChatDetails chat={selectedChat} onAddMsg={onAddMsg} /> : <Hero />}
+                {selectedChat ? <ChatDetails chat={selectedChat} onAddMsg={onAddMsg} userId={user._id} /> : <Hero />}
             </main>
         </div>
     )

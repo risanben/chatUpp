@@ -77,17 +77,17 @@ export async function loadUser(userId) {
     }
 }
 
-export async function updateUser(userToSave) {
-    
+export async function updateUser(userToSave, key) {
     try {
-        let savedUser = await userService.update(userToSave, userToSave.imgUrl)
+        let savedUser = await userService.update(userToSave, key)
         store.dispatch({
             type: SET_USER,
             user:savedUser
         })
 
     } catch (err) {
-        console.log('Cannot update user', err)
+        console.log('Cannot update user img', err)
         throw err
     }
 }
+

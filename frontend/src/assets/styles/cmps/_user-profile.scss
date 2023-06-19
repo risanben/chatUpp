@@ -39,5 +39,25 @@
             display: none;
         }
     }
+    
+    .name-container{
+        padding-left: 30px;
+        margin-top: 50px;
+        width: 100%;
+        color: $main-border-dark-clr;
+        background-color: white;
+        box-shadow: 0px 0px 8px 5px rgba(0, 73, 57, 0.068);
+
+        &>*{
+            height: 50px;
+        }
+        input,
+        &:focus{
+            border: none;
+            outline: none;
+            font-size: 20px;
+            color: $main-icons-color;
+        }
+    }
 }
 

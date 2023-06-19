@@ -10,6 +10,7 @@ import { UserAvatar } from "./user-avatar"
 export function UserProfile({ currDimensions, toggleUserProfile, user }) {
 
     const [isUploading, setIsUploading] = useState(false)
+    const [usernameToEdit, setUsernameToEdit] = useState(user.username)
     const [imgData, setImgData] = useState({
         imgUrl: null,
         height: 500,
@@ -22,9 +23,19 @@ export function UserProfile({ currDimensions, toggleUserProfile, user }) {
         const { secure_url, height, width } = await uploadService.uploadImg(ev)
         setImgData({ imgUrl: secure_url, width, height })
         let userToSave = { ...user, imgUrl: secure_url }
-        await updateUser(userToSave)
+        await updateUser(userToSave, 'imgUrl')
         setIsUploading(false)
         // onUploaded && onUploaded(secure_url)
+    }
+
+    function handleChange(ev) {
+        setUsernameToEdit(ev.target.value)
+    }
+
+    function onChangeUsername(ev){
+        if (ev) ev.preventDefault()
+        let userToSave = { ...user, username: usernameToEdit }
+        updateUser(userToSave, 'username')
     }
 
 
@@ -46,16 +57,17 @@ export function UserProfile({ currDimensions, toggleUserProfile, user }) {
                 </label>
 
                 <div className="name-container">
-                    <div className="title">
+                    <div className="title flex align-center">
                         Your name
                     </div>
                     <div className="input-container">
-                        <input type="text" value={user.username}/>
+                        <form onSubmit={onChangeUsername} className="flex align-center">
+                            <input type="text" value={usernameToEdit} onChange={handleChange} />
+                        </form>
                     </div>
                 </div>
 
             </section>
-            {/* <ImgUploader /> */}
         </div>
     )
 }
