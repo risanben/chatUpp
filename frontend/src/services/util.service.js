@@ -5,7 +5,9 @@ export const utilService = {
     debounce,
     randomPastTime,
     saveToStorage,
-    loadFromStorage
+    loadFromStorage,
+    getTimeConversion,
+    getRelativeTime
 }
 
 function makeId(length = 6) {
@@ -45,11 +47,11 @@ function randomPastTime() {
     return Date.now() - pastTime
 }
 
-function debounce(func, timeout = 300){
+function debounce(func, timeout = 300) {
     let timer
     return (...args) => {
-      clearTimeout(timer)
-      timer = setTimeout(() => { func.apply(this, args) }, timeout)
+        clearTimeout(timer)
+        timer = setTimeout(() => { func.apply(this, args) }, timeout)
     }
 }
 
@@ -61,3 +63,38 @@ function loadFromStorage(key) {
     const data = localStorage.getItem(key)
     return (data) ? JSON.parse(data) : undefined
 }
+
+function getTimeConversion(timestamp) {
+    const date = new Date(timestamp)
+    // const hours = date.getHours()
+    // const minutes = date.getMinutes()
+    const hours = String(date.getHours()).padStart(2, '0')
+    const minutes = String(date.getMinutes()).padStart(2, '0')
+    return `${hours}:${minutes}`
+}
+
+function getRelativeTime(timestamp) {
+    const currentDate = new Date();
+    const targetDate = new Date(timestamp);
+  
+    const sameDay = targetDate.getDate() === currentDate.getDate() &&
+                    targetDate.getMonth() === currentDate.getMonth() &&
+                    targetDate.getFullYear() === currentDate.getFullYear();
+  
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(currentDate.getDate() - 7);
+  
+    if (sameDay) {
+      const hours = targetDate.getHours().toString().padStart(2, '0');
+      const minutes = targetDate.getMinutes().toString().padStart(2, '0');
+      return `${hours}:${minutes}`;
+    } else if (targetDate >= oneWeekAgo) {
+      const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const dayOfWeek = daysOfWeek[targetDate.getDay()];
+      return dayOfWeek;
+    } else {
+      const day = targetDate.getDate().toString().padStart(2, '0');
+      const month = (targetDate.getMonth() + 1).toString().padStart(2, '0');
+      return `${day}/${month}`;
+    }
+  }

@@ -16,13 +16,20 @@
             color: $main-icons-color;
         }
 
+        .close-icon{
+            margin-right: 15px;
+            color: $main-icons-color;
+            font-size: 25px;
+            opacity: 0.6;
+        }
+
         textarea:focus,
         input:focus {
             outline: none;
         }
 
         input {
-            margin-left: 15px;
+            margin-left: 40px;
             border: none;
             line-height: 30px;
             width: 80%;

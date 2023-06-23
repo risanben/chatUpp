@@ -13,7 +13,9 @@ export const userService = {
     getById,
     remove,
     update,
-    changeScore
+    changeScore,
+    getUserUrl,
+    getUserName
 }
 
 window.userService = userService
@@ -35,6 +37,15 @@ async function createDemoUsers(){
 function getUsers() {
     return storageService.query('user')
     // return httpService.get(`user`)
+}
+
+async function getUserUrl(id){
+    const user = await getById(id)
+    return user.imgUrl
+}
+async function getUserName(id){
+    const user = await getById(id)
+    return user.username
 }
 
 
@@ -67,7 +78,7 @@ async function login(userCred) {
 
     const user = users.find(user => user.username === userCred.username)
     // const user = await httpService.post('auth/login', userCred)
-    console.log('user:', user)
+    // console.log('user:', user)
     if (user) {
         // socketService.login(user._id)
         return saveLocalUser(user)
@@ -130,6 +141,13 @@ function getLoggedinUser() {
         username: 'mai',
         password:'mai',
         imgUrl:'https://res.cloudinary.com/dcwibf9o5/image/upload/v1687174468/ijfmgo5brwhwk4gue92m.jpg'
+    },
+    {
+        _id:'qXJvf',
+        fullname: 'Jane Doe',
+        username: 'jane',
+        password:'jane',
+        imgUrl:'https://res.cloudinary.com/dcwibf9o5/image/upload/v1687190716/gps5k4scacs04qqlrjn2.jpg'
     },
     {
         _id:'iwrDv',

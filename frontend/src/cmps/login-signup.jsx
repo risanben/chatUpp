@@ -22,8 +22,7 @@ export function LoginSignup(props) {
     }
 
     function handleChange(ev) {
-        console.log('props.isCredentialMatched:',props.isCredentialMatched )
-           if (!props.isCredentialMatched) props.setIsCredentialMatched(true)
+        if (!props.isCredentialMatched) props.setIsCredentialMatched(true)
         const field = ev.target.name
         const value = ev.target.value
         setCredentials({ ...credentials, [field]: value })
@@ -76,7 +75,7 @@ export function LoginSignup(props) {
                     />
                     <button className='pointer'>Login</button>
                 </form>}
-                    {(!props.isCredentialMatched&& !isSignup) && <section className="errors">User name or password incorrect</section>}
+                {(!props.isCredentialMatched && !isSignup) && <section className="errors">User name or password incorrect</section>}
 
 
 

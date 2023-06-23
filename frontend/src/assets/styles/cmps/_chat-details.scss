@@ -6,9 +6,39 @@
     .chat-header{
         background-color: $main-bg-color;
         height: 77px;
+        min-height: 77px;
+
+        .user-avatar{
+            margin-left: 15px;
+        }
+
+        .parti-container{
+            margin-left: 15px;
+            font-size: 25px;
+        }
     }
 
     .message-list{
         flex-grow: 1;
+        overflow-x: hidden;
     }
+
+    ::-webkit-scrollbar {
+        width: 6px;
+      }
+      
+      /* Track */
+      ::-webkit-scrollbar-track {
+        background: $main-bg-color;
+      }
+      
+      /* Handle */
+      ::-webkit-scrollbar-thumb {
+        background: #c5c9ca;
+      }
+      
+      /* Handle on hover */
+      ::-webkit-scrollbar-thumb:hover {
+        background: #a3acae;
+      }
 }

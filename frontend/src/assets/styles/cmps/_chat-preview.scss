@@ -1,6 +1,16 @@
 .chat-preview {
     color: inherit;
     height: 85px;
+    padding-left: 10px;
+    padding-right: 15px;
+
+    &.selected {
+        background-color: $main-bg-color ;
+    }
+
+    &.unread{
+       font-weight: 600;
+    }
 
     &:hover {
         background-color: $main-bg-color;
@@ -8,13 +18,18 @@
     }
 
     .avatar-container {
-        width: 73px;
+        min-width: 73px;
     }
 
     .txt-container {
         border-bottom: 1px solid $main-bg-color;
         flex-grow: 1;
         margin-top: 5px;
+        margin-left: 10px;
+
+        // display: inline-block;
+        white-space: nowrap;
+        text-overflow: ellipsis;
 
         &:hover {
             border-bottom: none;
@@ -22,9 +37,36 @@
 
         .user-name {
             font-size: 22px;
-            color: black;
+            color: rgb(41, 41, 41);
+        }
+
+        .txt-preview{
+            color: $main-icons-color;
         }
     }
+
+    .recent-msg-info{
+
+        width: 50px;
+
+        .time{
+            font-size: 15px;
+            margin-top: 15px;
+            text-align: end;
+        }
+
+        .unread-count-container{
+            margin-top: 5px;
+           height: 25px;
+           width: 25px;
+           border-radius: 50%;
+           background-color: $main-notification-clr;
+           color: whitesmoke;
+           align-self: end;
+        //    align-self: center;
+        }
+    }
+
 
 
 }

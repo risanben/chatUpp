@@ -2,10 +2,10 @@ import { SET_BOARD, UPDATE_BOARD } from "./board.reducer.js";
 import { boardService } from "../services/board.service.local.js"
 import { store } from '../store/store.js'
 
-export async function loadboard(userId) {
+export async function loadboard(filters) {
 
     try {
-        const board = await boardService.query(userId)
+        const board = await boardService.query(filters)
         store.dispatch({
             type: SET_BOARD,
             board
@@ -19,6 +19,7 @@ export async function loadboard(userId) {
 }
 
 export async function updateBoard(board) {
+    console.log('board from update:', board)
     try {
         await boardService.save(board)
         store.dispatch({

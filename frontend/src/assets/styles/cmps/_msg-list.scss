@@ -1,0 +1,15 @@
+.message-list {
+    // position: relative;
+
+    .time-era {
+        position: fixed;
+        align-self: center;
+        color: $main-icons-color;
+        top: 106px;
+        background-color: whitesmoke;
+        font-size: 20px;
+        padding: 3px 15px;
+        border-radius: 5px;
+        border: 1px solid rgba(211, 211, 211, 0.607);
+    }
+}
