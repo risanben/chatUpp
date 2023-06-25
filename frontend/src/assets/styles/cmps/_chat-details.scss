@@ -1,44 +1,52 @@
+.chat-details {
+  background-color: $chat-bg-clr ;
+  flex-grow: 1;
 
-.chat-details{
-    background-color: $chat-bg-clr ;
+  .chat-header {
+    background-color: $main-bg-color;
+    height: 77px;
+    min-height: 77px;
+
+    .user-avatar {
+      margin-left: 15px;
+    }
+
+    .parti-container {
+      margin-left: 15px;
+      font-size: 25px;
+      flex-grow: 1;
+    }
+
+    .header-actions {
+      margin-right: 30px;
+
+      .search-icon{
+        font-size: 25px;
+      }
+    }
+  }
+
+  .message-list {
     flex-grow: 1;
+    overflow-x: scroll;
+  }
 
-    .chat-header{
-        background-color: $main-bg-color;
-        height: 77px;
-        min-height: 77px;
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
 
-        .user-avatar{
-            margin-left: 15px;
-        }
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: $main-bg-color;
+  }
 
-        .parti-container{
-            margin-left: 15px;
-            font-size: 25px;
-        }
-    }
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #c5c9ca;
+  }
 
-    .message-list{
-        flex-grow: 1;
-        overflow-x: hidden;
-    }
-
-    ::-webkit-scrollbar {
-        width: 6px;
-      }
-      
-      /* Track */
-      ::-webkit-scrollbar-track {
-        background: $main-bg-color;
-      }
-      
-      /* Handle */
-      ::-webkit-scrollbar-thumb {
-        background: #c5c9ca;
-      }
-      
-      /* Handle on hover */
-      ::-webkit-scrollbar-thumb:hover {
-        background: #a3acae;
-      }
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a3acae;
+  }
 }

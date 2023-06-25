@@ -7,9 +7,10 @@
         color: $main-icons-color;
         top: 106px;
         background-color: whitesmoke;
-        font-size: 20px;
+        font-size: 15px;
         padding: 3px 15px;
         border-radius: 5px;
         border: 1px solid rgba(211, 211, 211, 0.607);
+        transition: opacity 0.6s;
     }
 }

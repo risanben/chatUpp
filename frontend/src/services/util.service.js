@@ -7,7 +7,8 @@ export const utilService = {
     saveToStorage,
     loadFromStorage,
     getTimeConversion,
-    getRelativeTime
+    getRelativeTime,
+    getTimeEra
 }
 
 function makeId(length = 6) {
@@ -96,5 +97,30 @@ function getRelativeTime(timestamp) {
       const day = targetDate.getDate().toString().padStart(2, '0');
       const month = (targetDate.getMonth() + 1).toString().padStart(2, '0');
       return `${day}/${month}`;
+    }
+  }
+
+function getTimeEra(timestamp) {
+    const currentDate = new Date()
+    const targetDate = new Date(timestamp)
+  
+    const sameDay = targetDate.getDate() === currentDate.getDate() &&
+                    targetDate.getMonth() === currentDate.getMonth() &&
+                    targetDate.getFullYear() === currentDate.getFullYear()
+  
+    const oneWeekAgo = new Date()
+    oneWeekAgo.setDate(currentDate.getDate() - 7)
+  
+    if (sameDay) {
+
+      return `Today`
+    } else if (targetDate >= oneWeekAgo) {
+      const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+      const dayOfWeek = daysOfWeek[targetDate.getDay()]
+      return dayOfWeek
+    } else {
+      const day = targetDate.getDate().toString().padStart(2, '0')
+      const month = (targetDate.getMonth() + 1).toString().padStart(2, '0')
+      return `${day}/${month}`
     }
   }

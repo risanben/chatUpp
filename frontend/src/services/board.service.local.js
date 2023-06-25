@@ -33,13 +33,22 @@ async function query({ user, filterBy }) {
         }
 
     }
-    if (filterBy) {
+    if (filterBy?.txt) {
         const chats = board.chats.reduce((acc, chat) => {
             var chatNames = chat.participants.map(p => p.username)
-            chatNames = chatNames.filter(n => n.includes(filterBy))
+            chatNames = chatNames.filter(n => n.includes(filterBy.txt))
             if (chatNames.length) acc.push(chat)
             return acc
         }, [])
+        board = { ...board, chats: chats }
+    }
+    if (filterBy?.unread) {
+        console.log('board.chats:', board.chats)
+        var chats = board.chats.reduce((acc, c) => {
+            if (c.messages.some(m => !m.isRead)) acc.push(c)
+            return acc
+        }, [])
+
         board = { ...board, chats: chats }
     }
 

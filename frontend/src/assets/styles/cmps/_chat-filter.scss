@@ -16,7 +16,7 @@
             color: $main-icons-color;
         }
 
-        .close-icon{
+        .close-icon {
             margin-right: 15px;
             color: $main-icons-color;
             font-size: 25px;
@@ -40,9 +40,29 @@
         }
     }
 
-    .filter-icon {
-        margin-left: 10px;
-        font-size: 25px;
-        color: #54656fb5;
+    .filter-icon-container {
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 70%;
+
+        .icon-circle {
+            padding: 4px;
+            border-radius: 50%;
+            color:#54656fb5 ;
+
+            .filter-icon {
+                font-size: 25px;
+                color: inherit;
+            }
+
+            &.true {
+                background-color: $main-notification-clr;
+                color: white;
+            }
+
+        }
     }
+
 }

@@ -6,7 +6,7 @@ import { login, logout, signup } from '../store/user.actions.js'
 
 import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service.js'
 import { carService } from '../services/car.service.js'
-import { loadboard, updateBoard } from '../store/board.actions.js'
+import { loadboard, setSelectedChatId, updateBoard } from '../store/board.actions.js'
 import { ChatList } from '../cmps/chat-list.jsx'
 import { Hero } from '../cmps/hero.jsx'
 import { ChatDetails } from '../cmps/chat-details.jsx'
@@ -18,13 +18,21 @@ import { chatService } from '../services/chat.service.js'
 export function ChatIndex() {
     const user = useSelector(storeState => storeState.userModule.user)
     const board = useSelector(storeState => storeState.boardModule.board)
+    const selectedChatId = useSelector(storeState => storeState.boardModule.selectedChatId)
     const [isCredentialMatched, setIsCredentialMatched] = useState(true)
     const [selectedChat, setSelectedChat] = useState(null)
-    const [filterBy, setFilterBy] = useState('')
+    const [filterBy, setFilterBy] = useState(chatService.getDefaultFilter())
 
     useEffect(() => {
         if (user) loadboard({ user: user, filterBy: filterBy })
     }, [filterBy, user])
+
+    useEffect(() => {
+        if (selectedChatId) {
+            let chatSelected = board.chats.filter(c => c.id === selectedChatId)[0]
+            setSelectedChat(chatSelected)
+        }
+    }, [selectedChatId])
 
     async function onLogin(credentials) {
         try {
@@ -43,7 +51,7 @@ export function ChatIndex() {
             timestamp: Date.now(),
             sender: user._id,
             id: utilService.makeId(),
-            isRead:"true"
+            isRead: "true"
         }
 
         let boardToSave = await boardService.addMsg(board, selectedChat, msgToSave)
@@ -59,7 +67,7 @@ export function ChatIndex() {
     async function onLogout() {
         try {
             await logout()
-            setSelectedChat(null)
+            await setSelectedChatId(null)
             console.log('byebye')
         } catch (err) {
             console.error('problem logging out:', err)
@@ -76,13 +84,23 @@ export function ChatIndex() {
     }
 
     async function onSelectChat(chat) {
-        setSelectedChat(chat)
-        const chatToSave = chatService.updateIsRead(chat)
- 
-        try {
-            updateBoard(board)
-        } catch (err) {
-            console.error('unable to save board', err)
+        setSelectedChatId(chat.id)
+
+        if (chat.messages.some(m => !m.isRead)) {
+            const chatToSave = chatService.updateIsRead(chat)
+            try {
+                updateBoard(board)
+            } catch (err) {
+                console.error('unable to save board', err)
+            }
+        }
+    }
+
+    function onSetFilterby(filters) {
+        if (typeof filters === 'boolean') {
+            setFilterBy((prevFilter) => { return { ...prevFilter, unread: filters } })
+        } else {
+            setFilterBy((prevFilter) => { return { ...prevFilter, txt: filters } })
         }
     }
 
@@ -96,7 +114,7 @@ export function ChatIndex() {
             <div className='grey-background'></div>
             <main className='flex'>
                 {!!board && <ChatList
-                    setFilterBy={setFilterBy}
+                    onSetFilterby={onSetFilterby}
                     chats={board.chats}
                     selectedChatId={selectedChat?.id}
                     onSelectChat={onSelectChat}
