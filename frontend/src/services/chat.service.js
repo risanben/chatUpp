@@ -1,3 +1,5 @@
+import { boardService } from "./board.service.local"
+import { userService } from "./user.service"
 
 export const chatService = {
   // getById,
@@ -5,7 +7,8 @@ export const chatService = {
   updateIsRead,
   getVisiblePreviews,
   getMsgById,
-  getDefaultFilter
+  getDefaultFilter,
+  getArchivedCount
 }
 
 //   async function getById(ChatId) {
@@ -17,16 +20,27 @@ function getMsgById(msgId, messages) {
   return res
 }
 
-function getDefaultFilter(){
+function getDefaultFilter() {
   return {
-    txt:'',
-    unread:false
+    txt: '',
+    unRead: 'false',
+    archive: 'false'
   }
+}
+
+async function getArchivedCount() {
+  const user = userService.getLoggedinUser()
+  const userBoard = await boardService.query({ user })
+  return userBoard.chats.reduce((acc, c) => {
+    if (c.isArchived) acc++
+    return acc
+  }, 0)
 }
 
 
 function getChatReceiver(chat, loggedUserId) {
-  return chat.participants.filter(p => p.userId !== loggedUserId)[0]
+  let receiver = chat.participants.filter(p => p.userId !== loggedUserId)[0]
+  return userService.getById(receiver.userId)
   // const url = otherParticipant[0].imgUrl
 }
 

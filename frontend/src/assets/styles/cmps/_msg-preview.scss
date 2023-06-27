@@ -5,7 +5,8 @@
     border-radius: 10px;
     margin: 20px 10px;
     width: max-content;
-    padding: 10px;
+    max-width: 70%;
+    padding: 10px 10px 5px 10px;
 
     
     &.self{
@@ -19,6 +20,9 @@
 
     .msg-time{
         align-self: end;
-        font-size: 13px;
+        font-size: 14px;
+        margin-top: 5px;
+        font-weight: 600;
+        opacity: 0.8;
     }
 }

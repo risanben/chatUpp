@@ -18,10 +18,25 @@
     }
 
     .header-actions {
-      margin-right: 30px;
+      color: $main-icons-color;
+      &>*{
+        margin-right: 30px;
+      }
 
       .search-icon{
-        font-size: 25px;
+        font-size: 30px;
+      }
+
+      .option-con{
+        border-radius: 50%;
+        padding: 7px;
+
+        &.true{
+          background-color: $dark-bg-color;
+        }
+      }
+      .option-icon{
+        font-size: 30px;
       }
     }
   }

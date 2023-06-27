@@ -2,14 +2,14 @@
     color: inherit;
     height: 85px;
     padding-left: 10px;
-    padding-right: 15px;
+    // padding-right: 15px;
 
     &.selected {
         background-color: $main-bg-color ;
     }
 
-    &.unread{
-       font-weight: 600;
+    &.unread {
+        font-weight: 600;
     }
 
     &:hover {
@@ -21,11 +21,21 @@
         min-width: 73px;
     }
 
-    .txt-container {
+    .border-btm {
+        flex-grow: 1;
         border-bottom: 1px solid $main-bg-color;
+        overflow: hidden;
+
+        // display: inline-block;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .txt-container {
         flex-grow: 1;
         margin-top: 5px;
         margin-left: 10px;
+        overflow: hidden;
 
         // display: inline-block;
         white-space: nowrap;
@@ -38,32 +48,41 @@
         .user-name {
             font-size: 22px;
             color: rgb(41, 41, 41);
+            text-transform: capitalize;
         }
 
-        .txt-preview{
+        .txt-preview {
             color: $main-icons-color;
+            text-overflow: ellipsis;
+            overflow: hidden;
         }
     }
 
-    .recent-msg-info{
+    .recent-msg-info {
+        height: 100%;
+        min-width: 70px;
+        margin-right: 25px;
+        margin-left: 10px;
 
-        width: 50px;
-
-        .time{
+        .time {
+            margin-top: 10px;
             font-size: 15px;
-            margin-top: 15px;
             text-align: end;
+
+            &.green {
+                color: $main-notification-clr;
+            }
         }
 
-        .unread-count-container{
-            margin-top: 5px;
-           height: 25px;
-           width: 25px;
-           border-radius: 50%;
-           background-color: $main-notification-clr;
-           color: whitesmoke;
-           align-self: end;
-        //    align-self: center;
+        .unread-count-container {
+            margin-top: 10px;
+            height: 25px;
+            width: 25px;
+            border-radius: 50%;
+            background-color: $main-notification-clr;
+            color: whitesmoke;
+            align-self: end;
+            //    align-self: center;
         }
     }
 

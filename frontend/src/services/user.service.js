@@ -133,14 +133,14 @@ function getLoggedinUser() {
         fullname: 'ris benichou',
         username: 'ris',
         password:'ris',
-        imgUrl:'https://res.cloudinary.com/dcwibf9o5/image/upload/v1687174221/ozfn5c2uulrxaulrqoir.jpg'
+        imgUrl:'https://res.cloudinary.com/dcwibf9o5/image/upload/v1687784976/czw4gttnc1pvnmkaajw8.jpg'
     },
     {
         _id:'qXJvh',
         fullname: 'Mai Levi',
         username: 'mai',
         password:'mai',
-        imgUrl:'https://res.cloudinary.com/dcwibf9o5/image/upload/v1687174468/ijfmgo5brwhwk4gue92m.jpg'
+        imgUrl:'https://res.cloudinary.com/dcwibf9o5/image/upload/v1687787161/oxrc0qntq0fexc3nci7l.jpg'
     },
     {
         _id:'qXJvf',
@@ -150,11 +150,32 @@ function getLoggedinUser() {
         imgUrl:'https://res.cloudinary.com/dcwibf9o5/image/upload/v1687190716/gps5k4scacs04qqlrjn2.jpg'
     },
     {
+        _id:'iwrDvgJ',
+        fullname: 'Jordan Kay',
+        username: 'Jordan',
+        password:'jordan',
+        imgUrl:'https://res.cloudinary.com/dcwibf9o5/image/upload/v1687725434/uzkxm7tnfuxvsrsruwq2.jpg'
+    },
+    {
         _id:'iwrDv',
         fullname: 'demo guest',
         username: 'guest',
         password:'guest',
         imgUrl:'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
+    },
+    {
+        _id:'iwrDvfff',
+        fullname: 'Sharon Dan',
+        username: 'Sharon - Coding Academy',
+        password:'sharon',
+        imgUrl:'https://res.cloudinary.com/dcwibf9o5/image/upload/v1687768342/b8rrwer0n6aujpezsks2.jpg'
+    },
+    {
+        _id:'abc123',
+        fullname: 'mitch hokkings',
+        username: 'mitch hawkings',
+        password:'mitch',
+        imgUrl:'https://res.cloudinary.com/dcwibf9o5/image/upload/v1687174221/ozfn5c2uulrxaulrqoir.jpg'
     },
 ]
 
@@ -162,3 +183,4 @@ function getLoggedinUser() {
 
 
 
+// https://res.cloudinary.com/dcwibf9o5/image/upload/v1687174468/ijfmgo5brwhwk4gue92m.jpg

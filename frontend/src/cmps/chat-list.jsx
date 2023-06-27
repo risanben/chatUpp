@@ -1,3 +1,4 @@
+import { Archive } from "./archive";
 import { ChatFilter } from "./chat-filter";
 import { ChatListHeader } from "./chat-list-header";
 import { ChatPreview } from "./chat-preview";
@@ -12,6 +13,7 @@ export function ChatList({ chats, onSelectChat, onLogout, userId, onSetFilterby,
                 onLogout={onLogout}
             />
             <ChatFilter onSetFilterby={onSetFilterby} />
+            <Archive onSetFilterby={onSetFilterby} chats={chats}/>
             {chats?.length > 0 ?
                 chats.map(chat => <ChatPreview chat={chat} key={chat.id} onSelectChat={onSelectChat} userId={userId} selectedChatId={selectedChatId}/>)
                 :

@@ -14,6 +14,7 @@ import { utilService } from '../services/util.service.js'
 import { boardService } from '../services/board.service.local.js'
 import { LoginSignup } from '../cmps/login-signup.jsx'
 import { chatService } from '../services/chat.service.js'
+import { storageService } from '../services/async-storage.service.js'
 
 export function ChatIndex() {
     const user = useSelector(storeState => storeState.userModule.user)
@@ -23,6 +24,7 @@ export function ChatIndex() {
     const [selectedChat, setSelectedChat] = useState(null)
     const [filterBy, setFilterBy] = useState(chatService.getDefaultFilter())
 
+
     useEffect(() => {
         if (user) loadboard({ user: user, filterBy: filterBy })
     }, [filterBy, user])
@@ -31,6 +33,8 @@ export function ChatIndex() {
         if (selectedChatId) {
             let chatSelected = board.chats.filter(c => c.id === selectedChatId)[0]
             setSelectedChat(chatSelected)
+        } else {
+            setSelectedChat(null)
         }
     }, [selectedChatId])
 
@@ -61,6 +65,25 @@ export function ChatIndex() {
             boardService.updateParticipantBoard(board, selectedChat, msgToSave)
         } catch (err) {
             console.error('unable to save board', err)
+        }
+    }
+
+    async function onDeleteChat() {
+        let boardToSave = boardService.deleteChat(board, selectedChatId)
+        const receiver = await chatService.getChatReceiver(selectedChat, user._id)
+        const receiverId = receiver._id
+
+        try {
+            updateBoard(boardToSave)
+            boardService.deleteChatFromUser(receiverId, selectedChatId)
+        } catch (err) {
+            console.error('unable to save board', err)
+        } finally {
+            try {
+                setSelectedChatId(null)
+            } catch (err) {
+                console.error('cannot remove selected chat from store', err)
+            }
         }
     }
 
@@ -96,12 +119,29 @@ export function ChatIndex() {
         }
     }
 
-    function onSetFilterby(filters) {
-        if (typeof filters === 'boolean') {
-            setFilterBy((prevFilter) => { return { ...prevFilter, unread: filters } })
-        } else {
-            setFilterBy((prevFilter) => { return { ...prevFilter, txt: filters } })
+    function onSetFilterby({unRead, txt, archive}) {
+        if (archive){
+            if (archive === 'false'){
+            setFilterBy((prevFilter) => { return { ...prevFilter, archive } })
+            } else {
+            setFilterBy((prevFilter) => { return { ...prevFilter, archive } })
+            }
+        } 
+        if (unRead){
+            if (unRead === 'false'){
+            setFilterBy((prevFilter) => { return { ...prevFilter, unRead } })
+            } else {
+            setFilterBy((prevFilter) => { return { ...prevFilter, unRead } })
+            }
+        } 
+        if (txt){
+            setFilterBy((prevFilter) => { return { ...prevFilter, txt } })
         }
+        // if (typeof filters === 'boolean') {
+        //     setFilterBy((prevFilter) => { return { ...prevFilter, unread: filters } })
+        // } else {
+        //     setFilterBy((prevFilter) => { return { ...prevFilter, txt: filters } })
+        // }
     }
 
 
@@ -121,7 +161,7 @@ export function ChatIndex() {
                     onLogout={onLogout}
                     userId={user._id}
                 />}
-                {selectedChat ? <ChatDetails chat={selectedChat} onAddMsg={onAddMsg} userId={user._id} /> : <Hero />}
+                {selectedChat ? <ChatDetails chat={selectedChat} onAddMsg={onAddMsg} userId={user._id} onDeleteChat={onDeleteChat} /> : <Hero />}
             </main>
         </div>
     )

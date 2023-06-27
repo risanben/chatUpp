@@ -31,7 +31,7 @@ export async function setSelectedChatId(selectedChatId) {
 }
 
 export async function updateBoard(board) {
-    console.log('board from update:', board)
+ 
     try {
         await boardService.save(board)
         store.dispatch({

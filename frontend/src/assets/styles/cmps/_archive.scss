@@ -1,0 +1,39 @@
+.archive {
+    height: 7%;
+
+    .archive-icon-container {
+        color: $main-notification-clr;
+        font-size: 28px;
+        min-width: 94px;
+
+        .circle {
+            padding: 4px;
+            border-radius: 50%;
+
+            &.true{
+                background-color: $main-notification-clr;
+                color: white;
+            }
+        }
+
+    }
+
+    .container {
+        padding-right: 30px;
+        flex-grow: 1;
+        width: 80%;
+        border-bottom: 1px solid #f0f2f5;
+        font-size: 22px;
+
+        .title {
+            flex-grow: 1;
+        }
+
+        .number {
+            color: $main-notification-clr;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+    }
+}

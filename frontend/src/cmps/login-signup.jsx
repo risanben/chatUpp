@@ -35,6 +35,10 @@ export function LoginSignup(props) {
         clearState()
     }
 
+    function onGuestSelect(){
+        props.onLogin({username:'guest', fullname:'demo guest', password:'guest'})
+    }
+
     function onSignup(ev = null) {
         if (ev) ev.preventDefault()
         if (!credentials.username || !credentials.password || !credentials.fullname) return
@@ -76,7 +80,7 @@ export function LoginSignup(props) {
                     <button className='pointer'>Login</button>
                 </form>}
                 {(!props.isCredentialMatched && !isSignup) && <section className="errors">User name or password incorrect</section>}
-
+                {!isSignup && <button className='guest-btn pointer' onClick={onGuestSelect}>Continue as a guest</button>}
 
 
                 <div className="signup-section flex column align-center">

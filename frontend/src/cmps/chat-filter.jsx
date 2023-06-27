@@ -10,7 +10,7 @@ export function ChatFilter({ onSetFilterby }) {
     const [isUnreadActive, setIsUnreadActive] = useState(false)
 
     useEffect(() => {
-        onSetFilterby(userSearch)
+        onSetFilterby({txt:userSearch})
     }, [userSearch])
 
     function handleChange(ev) {
@@ -25,10 +25,10 @@ export function ChatFilter({ onSetFilterby }) {
     function onUnread() {
         if (isUnreadActive){
             setIsUnreadActive(false)
-            onSetFilterby(false)
+            onSetFilterby({unRead:'false'})
         } else{
             setIsUnreadActive(true)
-            onSetFilterby(true)
+            onSetFilterby({unRead:'true'})
         }
     }
 
