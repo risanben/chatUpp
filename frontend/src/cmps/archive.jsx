@@ -21,7 +21,6 @@ export function Archive({ onSetFilterby, chats }) {
     }
 
     async function getArchiveCount() {
-        console.log('ccccccccccc')
         const count = await chatService.getArchivedCount()
         setArchiveCount(count)
     }

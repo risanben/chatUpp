@@ -203,7 +203,6 @@ function getDemoBoard(user) {
 async function save(board) {
     var savedBoard
     if (board._id) {
-        console.log('board has Id')
         savedBoard = await storageService.put(STORAGE_KEY, board)
     } else {
         console.log('sent to storageservice.save instead od put :')

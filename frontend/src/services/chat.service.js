@@ -23,18 +23,26 @@ function getMsgById(msgId, messages) {
 }
 
 async function toggleArchive(chatId) {
-  let user = await userService.getLoggedinUser()
-  let userBoard = await boardService.query({ user })
-  let chatIdx = userBoard.chats.findIndex(c => c.id === chatId)
-  if (chatIdx === -1) return new Error('cannot find chat')
 
-  if (userBoard.chats[chatIdx].isArchived === undefined) {
-    userBoard.chats[chatIdx].isArchived = true
-  } else {
-    userBoard.chats[chatIdx].isArchived = !userBoard.chats[chatIdx].isArchived
+  try {
+    let user = await userService.getLoggedinUser()
+    let userBoard = await boardService.query({ user })
+    let chatIdx = userBoard.chats.findIndex(c => c.id === chatId)
+    if (chatIdx === -1) return new Error('cannot find chat')
+
+    if (userBoard.chats[chatIdx].isArchived === undefined) {
+      userBoard.chats[chatIdx].isArchived = true
+    } else {
+      userBoard.chats[chatIdx].isArchived = !userBoard.chats[chatIdx].isArchived
+    }
+
+    return boardService.save(userBoard)
+
+  } catch (err) {
+    return new console.error(' could not toggle chat isArchive');
   }
 
-  boardService.save(userBoard)
+
 }
 
 function getDefaultFilter() {

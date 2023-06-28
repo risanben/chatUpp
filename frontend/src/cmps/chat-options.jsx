@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { chatService } from "../services/chat.service"
 
-export function ChatOption({onDeleteChat, chat, toggleArchive}){
+export function ChatOption({onDeleteChat, chat, toggleChatArchive}){
 
 
     return (
@@ -9,7 +9,7 @@ export function ChatOption({onDeleteChat, chat, toggleArchive}){
             <div className="option flex align-center pointer">Contact info</div>
             <div className="option flex align-center pointer" onClick={onDeleteChat}>Delete this chat</div>
             <div className="option flex align-center pointer">Clear messages</div>
-            <div className="option flex align-center pointer" onClick={toggleArchive}>{chat.isArchived?'Unarchive this chat':'Archive this chat'}</div>
+            <div className="option flex align-center pointer" onClick={toggleChatArchive}>{chat.isArchived?'Unarchive this chat':'Archive this chat'}</div>
         </section>
     )
 }

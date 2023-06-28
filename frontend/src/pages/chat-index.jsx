@@ -128,6 +128,7 @@ export function ChatIndex() {
             } else {
                 setFilterBy((prevFilter) => { return { ...prevFilter, archive } })
             }
+         setSelectedChatId(null)
         }
         if (unRead) {
             if (unRead === 'false') {
@@ -141,28 +142,18 @@ export function ChatIndex() {
         }
     }
 
-    async function toggleArchive() {
-        chatService.toggleArchive(selectedChatId)
+    async function toggleChatArchive() {
+
+        // saving the userBoard with the archived toggle 
+        await chatService.toggleArchive(selectedChatId)
+
+        // managing the board thats in store 
         const chatIdx = board.chats.findIndex(c => c.id === selectedChatId)
         let boardToSave = { ...board }
         boardToSave.chats.splice(chatIdx,1)
-
-        try {
-           await store.dispatch({
-                type: 'SET_BOARD',
-                board:boardToSave
-            })
-    
-        } catch (err) {
-            console.log('Cannot update board', err)
-        }
-
-        if (isArchive) {
-            setIsArchive(false)
-        } else {
-            setIsArchive(true)
-        }
+        
         setSelectedChatId(null)
+        loadboard({ user: user, filterBy: filterBy })
     }
 
 
@@ -182,7 +173,7 @@ export function ChatIndex() {
                     onLogout={onLogout}
                     userId={user._id}
                 />}
-                {selectedChat ? <ChatDetails chat={selectedChat} onAddMsg={onAddMsg} userId={user._id} onDeleteChat={onDeleteChat} toggleArchive={toggleArchive} /> : <Hero />}
+                {selectedChat ? <ChatDetails chat={selectedChat} onAddMsg={onAddMsg} userId={user._id} onDeleteChat={onDeleteChat} toggleChatArchive={toggleChatArchive} /> : <Hero />}
             </main>
         </div>
     )
