@@ -3,6 +3,8 @@ import { boardService } from "../services/board.service.local.js"
 import { store } from '../store/store.js'
 
 export async function loadboard(filters) {
+    console.log('loadBoard!')
+    console.log('filters:', filters)
     try {
         const board = await boardService.query(filters)
         store.dispatch({

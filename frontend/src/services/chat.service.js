@@ -1,5 +1,6 @@
 import { boardService } from "./board.service.local"
 import { userService } from "./user.service"
+import { updateBoard } from '../store/board.actions'
 
 export const chatService = {
   // getById,
@@ -8,7 +9,8 @@ export const chatService = {
   getVisiblePreviews,
   getMsgById,
   getDefaultFilter,
-  getArchivedCount
+  getArchivedCount,
+  toggleArchive
 }
 
 //   async function getById(ChatId) {
@@ -18,6 +20,21 @@ export const chatService = {
 function getMsgById(msgId, messages) {
   let res = messages.find(m => m.id === msgId)
   return res
+}
+
+async function toggleArchive(chatId) {
+  let user = await userService.getLoggedinUser()
+  let userBoard = await boardService.query({ user })
+  let chatIdx = userBoard.chats.findIndex(c => c.id === chatId)
+  if (chatIdx === -1) return new Error('cannot find chat')
+
+  if (userBoard.chats[chatIdx].isArchived === undefined) {
+    userBoard.chats[chatIdx].isArchived = true
+  } else {
+    userBoard.chats[chatIdx].isArchived = !userBoard.chats[chatIdx].isArchived
+  }
+
+  boardService.save(userBoard)
 }
 
 function getDefaultFilter() {

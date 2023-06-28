@@ -10,7 +10,7 @@ export function Hero() {
                 </section>
                 <section className="sml-txt">
                     Send and receive messages without keeping your phone online<br></br>
-                    Use ChatApp on up to 4 linked devices and 1 phone at the same time.
+                    Use WebChat on up to 4 linked devices and 1 phone at the same time.
                 </section>
             </section>
         </div>

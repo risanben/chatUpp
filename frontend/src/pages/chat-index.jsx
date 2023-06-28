@@ -15,6 +15,7 @@ import { boardService } from '../services/board.service.local.js'
 import { LoginSignup } from '../cmps/login-signup.jsx'
 import { chatService } from '../services/chat.service.js'
 import { storageService } from '../services/async-storage.service.js'
+import { store } from '../store/store.js'
 
 export function ChatIndex() {
     const user = useSelector(storeState => storeState.userModule.user)
@@ -23,7 +24,8 @@ export function ChatIndex() {
     const [isCredentialMatched, setIsCredentialMatched] = useState(true)
     const [selectedChat, setSelectedChat] = useState(null)
     const [filterBy, setFilterBy] = useState(chatService.getDefaultFilter())
-
+    const [isArchive, setIsArchive] = useState(false)
+    let boardChats
 
     useEffect(() => {
         if (user) loadboard({ user: user, filterBy: filterBy })
@@ -119,29 +121,48 @@ export function ChatIndex() {
         }
     }
 
-    function onSetFilterby({unRead, txt, archive}) {
-        if (archive){
-            if (archive === 'false'){
-            setFilterBy((prevFilter) => { return { ...prevFilter, archive } })
+    function onSetFilterby({ unRead, txt, archive }) {
+        if (archive) {
+            if (archive === 'false') {
+                setFilterBy((prevFilter) => { return { ...prevFilter, archive } })
             } else {
-            setFilterBy((prevFilter) => { return { ...prevFilter, archive } })
+                setFilterBy((prevFilter) => { return { ...prevFilter, archive } })
             }
-        } 
-        if (unRead){
-            if (unRead === 'false'){
-            setFilterBy((prevFilter) => { return { ...prevFilter, unRead } })
+        }
+        if (unRead) {
+            if (unRead === 'false') {
+                setFilterBy((prevFilter) => { return { ...prevFilter, unRead } })
             } else {
-            setFilterBy((prevFilter) => { return { ...prevFilter, unRead } })
+                setFilterBy((prevFilter) => { return { ...prevFilter, unRead } })
             }
-        } 
-        if (txt){
+        }
+        if (txt) {
             setFilterBy((prevFilter) => { return { ...prevFilter, txt } })
         }
-        // if (typeof filters === 'boolean') {
-        //     setFilterBy((prevFilter) => { return { ...prevFilter, unread: filters } })
-        // } else {
-        //     setFilterBy((prevFilter) => { return { ...prevFilter, txt: filters } })
-        // }
+    }
+
+    async function toggleArchive() {
+        chatService.toggleArchive(selectedChatId)
+        const chatIdx = board.chats.findIndex(c => c.id === selectedChatId)
+        let boardToSave = { ...board }
+        boardToSave.chats.splice(chatIdx,1)
+
+        try {
+           await store.dispatch({
+                type: 'SET_BOARD',
+                board:boardToSave
+            })
+    
+        } catch (err) {
+            console.log('Cannot update board', err)
+        }
+
+        if (isArchive) {
+            setIsArchive(false)
+        } else {
+            setIsArchive(true)
+        }
+        setSelectedChatId(null)
     }
 
 
@@ -161,7 +182,7 @@ export function ChatIndex() {
                     onLogout={onLogout}
                     userId={user._id}
                 />}
-                {selectedChat ? <ChatDetails chat={selectedChat} onAddMsg={onAddMsg} userId={user._id} onDeleteChat={onDeleteChat} /> : <Hero />}
+                {selectedChat ? <ChatDetails chat={selectedChat} onAddMsg={onAddMsg} userId={user._id} onDeleteChat={onDeleteChat} toggleArchive={toggleArchive} /> : <Hero />}
             </main>
         </div>
     )

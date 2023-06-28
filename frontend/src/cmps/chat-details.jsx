@@ -8,10 +8,11 @@ import { BiDotsVerticalRounded } from "react-icons/bi"
 import { ChatOption } from "./chat-options.jsx"
 
 
-export function ChatDetails({ chat, onAddMsg, userId , onDeleteChat}) {
+export function ChatDetails({ chat, onAddMsg, userId , onDeleteChat, toggleArchive}) {
 
     const [participant, setParticipant] = useState(null)
     const [isOpen, setIsOpen] = useState(false)
+
     useEffect(() => {
         loadParticipant()
     }, [chat])
@@ -25,6 +26,8 @@ export function ChatDetails({ chat, onAddMsg, userId , onDeleteChat}) {
         setIsOpen((prev) => !prev)
     }
 
+    
+
 
     return (
         <section className="chat-details flex column">
@@ -36,7 +39,7 @@ export function ChatDetails({ chat, onAddMsg, userId , onDeleteChat}) {
                     <div className={`option-con flex align-center ${isOpen}`} onClick={toggleOption}>
                         <BiDotsVerticalRounded className="option-icon pointer" />
                     </div>
-                    {isOpen && <ChatOption onDeleteChat={onDeleteChat}/>}
+                    {isOpen && <ChatOption onDeleteChat={onDeleteChat} chat={chat} toggleArchive={toggleArchive}/>}
                 </div>
             </div>
 

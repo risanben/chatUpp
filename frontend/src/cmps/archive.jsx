@@ -8,7 +8,7 @@ export function Archive({ onSetFilterby, chats }) {
 
     useEffect(() => {
         getArchiveCount()
-    }, [chats])
+    }, [chats, chats.length])
 
     function toggleArchive() {
         if (!isArchive) {
@@ -21,6 +21,7 @@ export function Archive({ onSetFilterby, chats }) {
     }
 
     async function getArchiveCount() {
+        console.log('ccccccccccc')
         const count = await chatService.getArchivedCount()
         setArchiveCount(count)
     }

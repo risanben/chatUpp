@@ -11,6 +11,7 @@ export const boardService = {
     updateParticipantBoard,
     deleteChat,
     deleteChatFromUser,
+    toggleArchive
     // remove,
     // getEmptyCar,
     // addCarMsg
@@ -56,7 +57,6 @@ async function query({ user, filterBy }) {
     }
     if (filterBy?.archive === 'true') {
         var chats = board.chats.filter(c=>c.isArchived)
-
         board = { ...board, chats: chats }
     }
     if (filterBy?.archive === 'false') {
@@ -80,6 +80,18 @@ function deleteChat(board, chatId) {
     const chatIdx = board.chats.findIndex(c => c.id === chatId)
     if (chatIdx === -1) return new Error('could not find chat to remove')
     boardToSave.chats.splice(chatIdx, 1)
+    return boardToSave
+}
+
+function toggleArchive(board, chatId) {
+    let boardToSave = { ...board }
+    const chatIdx = board.chats.findIndex(c => c.id === chatId)
+    if (chatIdx === -1) return new Error('could not find chat')
+    if (boardToSave.chats[chatIdx].isArchived === undefined){
+        boardToSave.chats[chatIdx].isArchived = true
+    } else {
+        boardToSave.chats[chatIdx].isArchived = !boardToSave.chats[chatIdx].isArchived
+    }
     return boardToSave
 }
 
