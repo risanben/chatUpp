@@ -1,11 +1,14 @@
 import { useState } from 'react'
 import { IoMdSend } from 'react-icons/io'
+import { FaMicrophone } from 'react-icons/fa'
 
 export function ChatInput({onAddMsg}) {
 
     const [msg, setMsg] = useState('')
+    const [ isRecordingMode, setIsRecordingMode] = useState(true)
 
     function handleChange(ev) {
+
         setMsg(ev.target.value)
     }
 
@@ -25,7 +28,8 @@ export function ChatInput({onAddMsg}) {
             <form onSubmit={onSend}>
                 <input type="text" className="chat-input" onInput={handleChange} value={msg} />
             </form>
-            <IoMdSend className='send-icon pointer' onClick={onSend} />
+           {!isRecordingMode &&<IoMdSend className='send-icon pointer' onClick={onSend} />}
+           {isRecordingMode && <FaMicrophone className='rec-icon pointer'/>}
 
         </section>
     )

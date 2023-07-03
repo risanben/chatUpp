@@ -1,4 +1,5 @@
 import { storageService } from './async-storage.service.js'
+import { httpService } from './http.service.js'
 import { userService } from './user.service.js'
 import { utilService } from './util.service.js'
 
@@ -21,58 +22,61 @@ const STORAGE_KEY = 'board'
 
 
 async function query({ user, filterBy }) {
+    // return httpService.get(STORAGE_KEY, filterBy)
+    console.log('query');
+    return httpService.get(`board/${user._id}`, filterBy)
 
-    var boards = await storageService.query(STORAGE_KEY)
-    let board
-    if (!boards.length) {
-        boards = backupBoards
-        storageService._save(STORAGE_KEY, boards)
-    }
-    if (user) {
-        board = boards.find(b => b.userId === user._id)
-        if (!board) {
-            board = getDemoBoard(user)
-            board = storageService.post(STORAGE_KEY, board)
-        }
+    // var boards = await storageService.query(STORAGE_KEY)
+    // let board
+    // if (!boards.length) {
+    //     boards = backupBoards
+    //     storageService._save(STORAGE_KEY, boards)
+    // }
+    // if (user) {
+    //     board = boards.find(b => b.userId === user._id)
+    //     if (!board) {
+    //         board = getDemoBoard(user)
+    //         board = storageService.post(STORAGE_KEY, board)
+    //     }
 
-    }
-    if (filterBy?.txt) {
-        // const chats = board.chats.reduce((acc, chat) => {
-        //     var chatIds = chat.participants.map(p => {
-        //        getUser(p.userId)
-        //     })
-        //     // chatIds = chatNames.filter(n => n.includes(filterBy.txt))
-        //     // if (chatNames.length) acc.push(chat)
-        //     return acc
-        // }, [])
-        // board = { ...board, chats: chats }
-    }
-    if (filterBy?.unRead === 'true') {
-        var chats = board.chats.reduce((acc, c) => {
-            if (c.messages.some(m => !m.isRead)) acc.push(c)
-            return acc
-        }, [])
+    // }
+    // if (filterBy?.txt) {
+    //     // const chats = board.chats.reduce((acc, chat) => {
+    //     //     var chatIds = chat.participants.map(p => {
+    //     //        getUser(p.userId)
+    //     //     })
+    //     //     // chatIds = chatNames.filter(n => n.includes(filterBy.txt))
+    //     //     // if (chatNames.length) acc.push(chat)
+    //     //     return acc
+    //     // }, [])
+    //     // board = { ...board, chats: chats }
+    // }
+    // if (filterBy?.unRead === 'true') {
+    //     var chats = board.chats.reduce((acc, c) => {
+    //         if (c.messages.some(m => !m.isRead)) acc.push(c)
+    //         return acc
+    //     }, [])
 
-        board = { ...board, chats: chats }
-    }
-    if (filterBy?.archive === 'true') {
-        var chats = board.chats.filter(c=>c.isArchived)
-        board = { ...board, chats: chats }
-    }
-    if (filterBy?.archive === 'false') {
-        var chats = board.chats.filter(c=>!c.isArchived)
-        board = { ...board, chats: chats }
-    }
+    //     board = { ...board, chats: chats }
+    // }
+    // if (filterBy?.archive === 'true') {
+    //     var chats = board.chats.filter(c=>c.isArchived)
+    //     board = { ...board, chats: chats }
+    // }
+    // if (filterBy?.archive === 'false') {
+    //     var chats = board.chats.filter(c=>!c.isArchived)
+    //     board = { ...board, chats: chats }
+    // }
 
-    // Sort the chats array based on the message with the latest timestamp
-    board.chats.sort((chatA, chatB) => {
-        const latestTimestampA = chatA.messages[chatA.messages.length - 1].timestamp
-        const latestTimestampB = chatB.messages[chatB.messages.length - 1].timestamp
+    // // Sort the chats array based on the message with the latest timestamp
+    // board.chats.sort((chatA, chatB) => {
+    //     const latestTimestampA = chatA.messages[chatA.messages.length - 1].timestamp
+    //     const latestTimestampB = chatB.messages[chatB.messages.length - 1].timestamp
 
-        return latestTimestampB - latestTimestampA
-    })
+    //     return latestTimestampB - latestTimestampA
+    // })
 
-    return board
+    // return board
 }
 
 function deleteChat(board, chatId) {
@@ -87,7 +91,7 @@ function toggleArchive(board, chatId) {
     let boardToSave = { ...board }
     const chatIdx = board.chats.findIndex(c => c.id === chatId)
     if (chatIdx === -1) return new Error('could not find chat')
-    if (boardToSave.chats[chatIdx].isArchived === undefined){
+    if (boardToSave.chats[chatIdx].isArchived === undefined) {
         boardToSave.chats[chatIdx].isArchived = true
     } else {
         boardToSave.chats[chatIdx].isArchived = !boardToSave.chats[chatIdx].isArchived
@@ -203,10 +207,12 @@ function getDemoBoard(user) {
 async function save(board) {
     var savedBoard
     if (board._id) {
-        savedBoard = await storageService.put(STORAGE_KEY, board)
+        // savedBoard = await storageService.put(STORAGE_KEY, board)
+        savedBoard = await httpService.put(`board/${board._id}`, board)
     } else {
         console.log('sent to storageservice.save instead od put :')
-        savedBoard = await storageService.post(STORAGE_KEY, board)
+        // savedBoard = await storageService.post(STORAGE_KEY, board)
+        savedBoard = await httpService.post('board', board)
     }
 
     return savedBoard
@@ -216,6 +222,10 @@ async function addMsg(board, chat, msg) {
     let boardToSave = { ...board }
     let chatToSave = boardToSave.chats.find(c => c.id === chat.id)
     chatToSave.messages.push(msg)
+
+    let chatIdx = boardToSave.chats.findIndex(c => c.id === chat.id)
+    let cuttedChat = boardToSave.chats.splice(chatIdx, 1)
+    boardToSave.chats.unshift(cuttedChat[0])
     return boardToSave
 }
 
@@ -259,10 +269,10 @@ let backupBoards = [
     // ris 
     {
         "_id": "b101",
-        "userId": 'tGJgU',
+        "userId": "tGJgU",
         "chats": [
             {
-                "isArchived":true,
+                "isArchived": true,
                 "id": "c23g5fg",
                 "participants": [
                     {
@@ -362,23 +372,23 @@ let backupBoards = [
                 "id": "c110fd",
                 "participants": [
                     {
-                        'userId': 'iwrDvfff',
+                        "userId": "iwrDvfff",
                     },
                     {
-                        'userId': 'tGJgU',
+                        "userId": "tGJgU",
                     }
                 ],
                 "messages": [
                     {
                         "id": "m1014f5",
-                        "sender": 'tGJgU',
+                        "sender": "tGJgU",
                         "timestamp": 1687768856451,
                         "content": "hey ive tried to call you",
                         "isRead": true
                     },
                     {
                         "id": "m1013gf3",
-                        "sender": 'iwrDvfff',
+                        "sender": "iwrDvfff",
                         "timestamp": 1687768905927,
                         "content": "hey sorry ive been so busy last few days. you alright?",
                         "isRead": true
@@ -451,23 +461,23 @@ let backupBoards = [
                 "id": "c101",
                 "participants": [
                     {
-                        'userId': 'tGJgU',
+                        "userId": "tGJgU",
                     },
                     {
-                        'userId': 'qXJvh',
+                        "userId": "qXJvh",
                     }
                 ],
                 "messages": [
                     {
                         "id": "m101",
-                        "sender": 'tGJgU',
+                        "sender": "tGJgU",
                         "timestamp": 1685628094592,
                         "content": "Hello, Mai, im Ris!",
                         "isRead": true
                     },
                     {
                         "id": "message2",
-                        "sender": 'qXJvh',
+                        "sender": "qXJvh",
                         "timestamp": 1685628094592,
                         "content": "Hi Ris, my name is Mai",
                         "isRead": false
@@ -478,10 +488,10 @@ let backupBoards = [
                 "id": "c110",
                 "participants": [
                     {
-                        'userId': 'iwrDvgJ',
+                        "userId": "iwrDvgJ",
                     },
                     {
-                        'userId': 'tGJgU',
+                        "userId": "tGJgU",
                     }
                 ],
                 "messages": [
@@ -561,23 +571,23 @@ let backupBoards = [
                 "id": "c102",
                 "participants": [
                     {
-                        'userId': 'tGJgU',
+                        "userId": "tGJgU",
                     },
                     {
-                        'userId': 'qXJvf',
+                        "userId": "qXJvf",
                     },
                 ],
                 "messages": [
                     {
                         "id": "m102",
-                        "sender": 'qXJvf',
+                        "sender": "qXJvf",
                         "timestamp": 1685628094598,
                         "content": "Hiiii ris im jane",
                         "isRead": true
                     },
                     {
                         "id": "message1",
-                        "sender": 'tGJgU',
+                        "sender": "tGJgU",
                         "timestamp": 1685628094599,
                         "content": "hello jane! i missed you ",
                         "isRead": true

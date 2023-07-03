@@ -16,6 +16,7 @@ import { LoginSignup } from '../cmps/login-signup.jsx'
 import { chatService } from '../services/chat.service.js'
 import { storageService } from '../services/async-storage.service.js'
 import { store } from '../store/store.js'
+import { Loader } from './loader.jsx'
 
 export function ChatIndex() {
     const user = useSelector(storeState => storeState.userModule.user)
@@ -128,7 +129,8 @@ export function ChatIndex() {
             } else {
                 setFilterBy((prevFilter) => { return { ...prevFilter, archive } })
             }
-         setSelectedChatId(null)
+            setSelectedChatId(null)
+            return
         }
         if (unRead) {
             if (unRead === 'false') {
@@ -136,29 +138,26 @@ export function ChatIndex() {
             } else {
                 setFilterBy((prevFilter) => { return { ...prevFilter, unRead } })
             }
+            return
         }
-        if (txt) {
-            setFilterBy((prevFilter) => { return { ...prevFilter, txt } })
-        }
+
+        setFilterBy((prevFilter) => { return { ...prevFilter, txt } })
     }
 
     async function toggleChatArchive() {
-
-        // saving the userBoard with the archived toggle 
         await chatService.toggleArchive(selectedChatId)
-
-        // managing the board thats in store 
-        const chatIdx = board.chats.findIndex(c => c.id === selectedChatId)
-        let boardToSave = { ...board }
-        boardToSave.chats.splice(chatIdx,1)
-        
         setSelectedChatId(null)
         loadboard({ user: user, filterBy: filterBy })
     }
 
+    // function onClearChat(){
+    //     chatService.onClearChat()
+    // }
+
+
 
     if (!user) return <LoginSignup onSignup={onSignup} onLogin={onLogin} isCredentialMatched={isCredentialMatched} setIsCredentialMatched={setIsCredentialMatched} />
-    if (!board) return 'loading...'
+    if (!board) return <Loader />
 
     return (
         <div className='chat-index'>

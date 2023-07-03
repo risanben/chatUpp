@@ -1,6 +1,6 @@
 import { boardService } from "./board.service.local"
 import { userService } from "./user.service"
-import { updateBoard } from '../store/board.actions'
+// import { updateBoard } from '../store/board.actions'
 
 export const chatService = {
   // getById,
@@ -23,7 +23,6 @@ function getMsgById(msgId, messages) {
 }
 
 async function toggleArchive(chatId) {
-
   try {
     let user = await userService.getLoggedinUser()
     let userBoard = await boardService.query({ user })

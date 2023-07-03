@@ -8,13 +8,19 @@ export function ChatFilter({ onSetFilterby }) {
 
     const [userSearch, setUserSearch] = useState('')
     const [isUnreadActive, setIsUnreadActive] = useState(false)
+    const [isInitialRender, setIsInitialRender] = useState(true)
 
     useEffect(() => {
-        onSetFilterby({txt:userSearch})
+      // Skip the initial render
+      if (isInitialRender) {
+        setIsInitialRender(false)
+        return
+      }
+  
+      onSetFilterby({ txt: userSearch })
     }, [userSearch])
 
     function handleChange(ev) {
-        // console.log('ev.target.value:', ev.target.value)
         setUserSearch(ev.target.value)
     }
 
