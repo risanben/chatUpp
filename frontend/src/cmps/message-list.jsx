@@ -3,7 +3,7 @@ import { MsgPreview } from "./msg-preview"
 import { utilService } from "../services/util.service"
 import { chatService } from "../services/chat.service"
 
-export function MessageList({ messages, userId }) {
+export function MessageList({ messages, userId,onRemoveMsg }) {
 
     const [lastMsg, setLastMsg] = useState(null)
     const [timeEra, setTimeEra] = useState(null)
@@ -85,7 +85,7 @@ export function MessageList({ messages, userId }) {
         <section className="message-list flex column" ref={scrollRef}>
             {timeEra && <div className="time-era" ref={timeEraRef}>{timeEra}</div>}
             {
-                messages.map(msg => <MsgPreview msg={msg} userId={userId} key={msg.id} lastMsg={lastMsg} />)
+                messages.map(msg => <MsgPreview msg={msg} userId={userId} key={msg.id} lastMsg={lastMsg} onRemoveMsg={onRemoveMsg}/>)
             }
         </section>
     )

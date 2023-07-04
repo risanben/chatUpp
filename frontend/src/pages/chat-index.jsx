@@ -6,7 +6,7 @@ import { login, logout, signup } from '../store/user.actions.js'
 
 import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service.js'
 import { carService } from '../services/car.service.js'
-import { loadboard, setSelectedChatId, updateBoard } from '../store/board.actions.js'
+import { loadboard, setBoard, setSelectedChatId, updateBoard } from '../store/board.actions.js'
 import { ChatList } from '../cmps/chat-list.jsx'
 import { Hero } from '../cmps/hero.jsx'
 import { ChatDetails } from '../cmps/chat-details.jsx'
@@ -26,11 +26,11 @@ export function ChatIndex() {
     const [selectedChat, setSelectedChat] = useState(null)
     const [filterBy, setFilterBy] = useState(chatService.getDefaultFilter())
     const [isArchive, setIsArchive] = useState(false)
-    let boardChats
+
 
     useEffect(() => {
-        if (user) loadboard({ user: user, filterBy: filterBy })
-    }, [filterBy, user])
+        if (user) loadboard(user)
+    }, [user])
 
     useEffect(() => {
         if (selectedChatId) {
@@ -147,12 +147,25 @@ export function ChatIndex() {
     async function toggleChatArchive() {
         await chatService.toggleArchive(selectedChatId)
         setSelectedChatId(null)
-        loadboard({ user: user, filterBy: filterBy })
+        loadboard(user)
     }
 
     // function onClearChat(){
     //     chatService.onClearChat()
     // }
+
+    async function onRemoveMsg(msgId) {
+        const boardToSave = await chatService.deleteMsg(board, selectedChat._id, msgId)
+        const participant = await chatService.getChatReceiver(selectedChat, user._id)
+        const participantBoard = await boardService.query(participant)
+        await chatService.deleteMsg(participantBoard, selectedChat._id, msgId)
+        console.log('finished');
+        try {
+            setBoard(boardToSave)
+        } catch (err) {
+            console.error('unable to save board', err)
+        }
+    }
 
 
 
@@ -165,6 +178,7 @@ export function ChatIndex() {
             <div className='grey-background'></div>
             <main className='flex'>
                 {!!board && <ChatList
+                    filterBy={filterBy}
                     onSetFilterby={onSetFilterby}
                     chats={board.chats}
                     selectedChatId={selectedChat?.id}
@@ -172,7 +186,7 @@ export function ChatIndex() {
                     onLogout={onLogout}
                     userId={user._id}
                 />}
-                {selectedChat ? <ChatDetails chat={selectedChat} onAddMsg={onAddMsg} userId={user._id} onDeleteChat={onDeleteChat} toggleChatArchive={toggleChatArchive} /> : <Hero />}
+                {selectedChat ? <ChatDetails chat={selectedChat} onAddMsg={onAddMsg} userId={user._id} onDeleteChat={onDeleteChat} toggleChatArchive={toggleChatArchive} onRemoveMsg={onRemoveMsg} /> : <Hero />}
             </main>
         </div>
     )

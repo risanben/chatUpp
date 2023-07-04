@@ -2,10 +2,9 @@ import { SET_BOARD, SET_SELECTED_CHAT, UPDATE_BOARD } from "./board.reducer.js";
 import { boardService } from "../services/board.service.local.js"
 import { store } from '../store/store.js'
 
-export async function loadboard(filters) {
-    console.log('loadboard');
+export async function loadboard(user) {
     try {
-        const board = await boardService.query(filters)
+        const board = await boardService.query(user)
         store.dispatch({
             type: SET_BOARD,
             board
@@ -32,7 +31,6 @@ export async function setSelectedChatId(selectedChatId) {
 }
 
 export async function updateBoard(board) {
- 
     try {
         await boardService.save(board)
         store.dispatch({
@@ -42,6 +40,19 @@ export async function updateBoard(board) {
 
     } catch (err) {
         console.log('Cannot update board', err)
+        throw err
+    }
+}
+
+export async function setBoard(board) {
+    try {
+        store.dispatch({
+            type: SET_BOARD,
+            board
+        })
+
+    } catch (err) {
+        console.log('Cannot set board', err)
         throw err
     }
 }

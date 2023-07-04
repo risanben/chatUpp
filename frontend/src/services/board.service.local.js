@@ -21,10 +21,10 @@ window.cs = boardService
 const STORAGE_KEY = 'board'
 
 
-async function query({ user, filterBy }) {
+async function query(user) {
     // return httpService.get(STORAGE_KEY, filterBy)
     console.log('query');
-    return httpService.get(`board/${user._id}`, filterBy)
+    return httpService.get(`board/${user._id}`)
 
     // var boards = await storageService.query(STORAGE_KEY)
     // let board
@@ -372,10 +372,10 @@ let backupBoards = [
                 "id": "c110fd",
                 "participants": [
                     {
-                        "userId": "iwrDvfff",
+                        "userId": "iwrDvfff"
                     },
                     {
-                        "userId": "tGJgU",
+                        "userId": "tGJgU"
                     }
                 ],
                 "messages": [
@@ -454,17 +454,17 @@ let backupBoards = [
                         "sender": "tGJgU",
                         "timestamp": 1687770708349,
                         "content": "Agreed! We have so many"
-                    },
+                    }
                 ]
             },
             {
                 "id": "c101",
                 "participants": [
                     {
-                        "userId": "tGJgU",
+                        "userId": "tGJgU"
                     },
                     {
-                        "userId": "qXJvh",
+                        "userId": "qXJvh"
                     }
                 ],
                 "messages": [
@@ -488,10 +488,10 @@ let backupBoards = [
                 "id": "c110",
                 "participants": [
                     {
-                        "userId": "iwrDvgJ",
+                        "userId": "iwrDvgJ"
                     },
                     {
-                        "userId": "tGJgU",
+                        "userId": "tGJgU"
                     }
                 ],
                 "messages": [

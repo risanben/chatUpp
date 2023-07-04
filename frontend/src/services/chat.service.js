@@ -10,7 +10,8 @@ export const chatService = {
   getMsgById,
   getDefaultFilter,
   getArchivedCount,
-  toggleArchive
+  toggleArchive,
+  deleteMsg
 }
 
 //   async function getById(ChatId) {
@@ -22,10 +23,23 @@ function getMsgById(msgId, messages) {
   return res
 }
 
+async function deleteMsg(board, chatId, msgId) {
+  const updatedBoard = { ...board }
+  const chatIndex = updatedBoard.chats.findIndex(c => c._id === chatId)
+  if (chatIndex !== -1) {
+    const updatedChat = { ...updatedBoard.chats[chatIndex] }
+    updatedChat.messages = updatedChat.messages.filter(msg => msg._id !== msgId);
+    updatedBoard.chats[chatIndex] = updatedChat;
+    await boardService.save(updatedBoard)
+    return updatedBoard;
+  }
+  return new Error('couldnt find the msg to remove')
+}
+
 async function toggleArchive(chatId) {
   try {
     let user = await userService.getLoggedinUser()
-    let userBoard = await boardService.query({ user })
+    let userBoard = await boardService.query( user )
     let chatIdx = userBoard.chats.findIndex(c => c.id === chatId)
     if (chatIdx === -1) return new Error('cannot find chat')
 
@@ -54,7 +68,7 @@ function getDefaultFilter() {
 
 async function getArchivedCount() {
   const user = userService.getLoggedinUser()
-  const userBoard = await boardService.query({ user })
+  const userBoard = await boardService.query(user)
   return userBoard.chats.reduce((acc, c) => {
     if (c.isArchived) acc++
     return acc

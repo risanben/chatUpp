@@ -7,8 +7,14 @@ async function getBoardById(req, res) {
   try {
     const userId = req.params.id
     const board = await boardService.getById(userId)
-    const filteredBoard = filterBoard(board, req.query)
-    res.json(filteredBoard)
+    // const filteredBoard = filterBoard(board, req.query)
+
+    board.chats.sort((chatA, chatB) => {
+      const latestTimestampA = chatA.messages[chatA.messages.length - 1].timestamp
+      const latestTimestampB = chatB.messages[chatB.messages.length - 1].timestamp
+      return latestTimestampB - latestTimestampA
+    })
+    res.json(board)
   } catch (err) {
     logger.error('Failed to get board', err)
     res.status(500).send({ err: 'Failed to get board' })
@@ -29,39 +35,39 @@ async function getboards(req, res) {
   }
 }
 
-function filterBoard(board, filterby) {
-  console.log('*****filterby.archive:', filterby.archive)
-  let filteredBoard = {...board}
-  if (filterby.txt) {
-    const searchText = filterby.txt.toLowerCase();
-    const regex = new RegExp(searchText, 'i')
-    filteredBoard.chats = filteredBoard.chats.filter(chat =>
-      chat.messages.some(message =>
-        regex.test(message.content)
-      )
-    )
-  }
+// function filterBoard(board, filterby) {
+//   console.log('*****filterby.archive:', filterby.archive)
+//   let filteredBoard = {...board}
+//   if (filterby.txt) {
+//     const searchText = filterby.txt.toLowerCase();
+//     const regex = new RegExp(searchText, 'i')
+//     filteredBoard.chats = filteredBoard.chats.filter(chat =>
+//       chat.messages.some(message =>
+//         regex.test(message.content)
+//       )
+//     )
+//   }
 
-  if (filterby.unRead === 'true') {
-    filteredBoard.chats = filteredBoard.chats.filter(c =>
-      c.messages.some(m => !m.isRead))
-  }
+//   if (filterby.unRead === 'true') {
+//     filteredBoard.chats = filteredBoard.chats.filter(c =>
+//       c.messages.some(m => !m.isRead))
+//   }
 
-  if (filterby.archive === 'true') {
-    filteredBoard.chats = filteredBoard.chats.filter(c => c.isArchived)
-  }
-  if (filterby.archive === 'false') {
-    filteredBoard.chats = filteredBoard.chats.filter(c => !c.isArchived)
-  }
+//   if (filterby.archive === 'true') {
+//     filteredBoard.chats = filteredBoard.chats.filter(c => c.isArchived)
+//   }
+//   if (filterby.archive === 'false') {
+//     filteredBoard.chats = filteredBoard.chats.filter(c => !c.isArchived)
+//   }
 
-  filteredBoard.chats.sort((chatA, chatB) => {
-    const latestTimestampA = chatA.messages[chatA.messages.length - 1].timestamp
-    const latestTimestampB = chatB.messages[chatB.messages.length - 1].timestamp
-    return latestTimestampB - latestTimestampA
-  })
+//   filteredBoard.chats.sort((chatA, chatB) => {
+//     const latestTimestampA = chatA.messages[chatA.messages.length - 1].timestamp
+//     const latestTimestampB = chatB.messages[chatB.messages.length - 1].timestamp
+//     return latestTimestampB - latestTimestampA
+//   })
 
-  return filteredBoard
-}
+//   return filteredBoard
+// }
 
 async function addBoard(req, res) {
 

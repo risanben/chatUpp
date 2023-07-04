@@ -8,7 +8,7 @@ import { BiDotsVerticalRounded } from "react-icons/bi"
 import { ChatOption } from "./chat-options.jsx"
 
 
-export function ChatDetails({ chat, onAddMsg, userId , onDeleteChat, toggleChatArchive}) {
+export function ChatDetails({ chat, onAddMsg, userId , onDeleteChat, toggleChatArchive,onRemoveMsg}) {
 
     const [participant, setParticipant] = useState(null)
     const [isOpen, setIsOpen] = useState(false)
@@ -46,6 +46,7 @@ export function ChatDetails({ chat, onAddMsg, userId , onDeleteChat, toggleChatA
             <MessageList
                 messages={chat.messages}
                 userId={userId}
+                onRemoveMsg={onRemoveMsg}
             />
 
             <ChatInput onAddMsg={onAddMsg} />

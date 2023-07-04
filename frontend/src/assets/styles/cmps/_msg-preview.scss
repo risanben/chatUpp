@@ -1,28 +1,48 @@
-
-
-.msg-preview{
+.msg-preview {
     background-color: white;
     border-radius: 10px;
     margin: 20px 10px;
     // width: max-content;
     max-width: 70%;
     padding: 10px 10px 5px 10px;
+    position: relative;
 
-    
-    &.self{
-        align-self: flex-end;
-        background-color: $self-msg-bg-clr;
-    }
+    .msg-txt {}
 
-    .msg-txt{
-
-    }
-
-    .msg-time{
+    .msg-time {
         align-self: end;
         font-size: 14px;
         margin-top: 5px;
         font-weight: 600;
         opacity: 0.8;
+    }
+
+    .msg-optn-container {
+        background-color: inherit;
+        height: 30px;
+        width: 30px;
+        top: 10px;
+        left: 9px;
+        border-radius: 50%;
+        position: absolute;
+        opacity: 0;
+        transition: opacity 0.5s;
+
+        .down-arrow{
+            font-size: 25px;
+            color: #6971769a;
+        }
+    }
+
+    &:hover {
+        .msg-optn-container {
+            opacity: 1;
+        }
+    }
+
+
+    &.self {
+        align-self: flex-end;
+        background-color: $self-msg-bg-clr;
     }
 }
