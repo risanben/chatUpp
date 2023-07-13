@@ -43,6 +43,18 @@ function setupSocketAPI(http) {
             delete socket.userId
         })
 
+        socket.on('board-updated', (board) => {
+            logger.info(`board updated to user [id: ${board.userId}]`)
+            emitToUser({type: 'board-updated', data: board, userId: board.userId})
+        })
+        socket.on('user-typing', (info) => {
+            // logger.info(`board updated to user [id: ${board.userId}]`)
+            emitToUser({type: 'user-typing', data: info.from, userId: info.to})
+        })
+        socket.on('user-stopped-typing', (info) => {
+            // logger.info(`board updated to user [id: ${board.userId}]`)
+            emitToUser({type: 'user-stopped-typing', data: info.from, userId: info.to})
+        })
     })
 }
 
@@ -52,7 +64,7 @@ function emitTo({ type, data, label }) {
 }
 
 async function emitToUser({ type, data, userId }) {
-    userId = userId.toString()
+    // userId = userId.toString()
     const socket = await _getUserSocket(userId)
 
     if (socket) {

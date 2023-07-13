@@ -14,7 +14,7 @@ module.exports = {
 }
 
 async function query() {
- 
+
     try {
         const collection = await dbService.getCollection('user')
         var users = await collection.find({}).toArray()
@@ -33,7 +33,7 @@ async function query() {
 async function getById(userId) {
     try {
         const collection = await dbService.getCollection('user')
-        const user = await collection.findOne({ _id:userId })
+        const user = await collection.findOne({ _id: userId })
         delete user.password
         return user
     } catch (err) {
@@ -62,14 +62,10 @@ async function remove(userId) {
     }
 }
 
-async function update(user) {
+async function update(userId, updateProps) {
     try {
-        // peek only updatable properties
-        const userToSave = {
-            _id: ObjectId(user._id), // needed for the returnd obj
-            fullname: user.fullname,
-            score: user.score,
-        }
+        const userToSave = await getById(userId)
+        userToSave[updateProps.key] = updateProps.value
         const collection = await dbService.getCollection('user')
         await collection.updateOne({ _id: userToSave._id }, { $set: userToSave })
         return userToSave

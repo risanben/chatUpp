@@ -6,7 +6,7 @@ import { login, logout, signup } from '../store/user.actions.js'
 
 import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service.js'
 import { carService } from '../services/car.service.js'
-import { loadboard, setBoard, setSelectedChatId, updateBoard } from '../store/board.actions.js'
+import { loadboard, setBoard, setSelectedChatIdx, updateBoard } from '../store/board.actions.js'
 import { ChatList } from '../cmps/chat-list.jsx'
 import { Hero } from '../cmps/hero.jsx'
 import { ChatDetails } from '../cmps/chat-details.jsx'
@@ -14,6 +14,7 @@ import { utilService } from '../services/util.service.js'
 import { boardService } from '../services/board.service.local.js'
 import { LoginSignup } from '../cmps/login-signup.jsx'
 import { chatService } from '../services/chat.service.js'
+import { socketService } from '../services/socket.service.js'
 import { storageService } from '../services/async-storage.service.js'
 import { store } from '../store/store.js'
 import { Loader } from './loader.jsx'
@@ -21,25 +22,25 @@ import { Loader } from './loader.jsx'
 export function ChatIndex() {
     const user = useSelector(storeState => storeState.userModule.user)
     const board = useSelector(storeState => storeState.boardModule.board)
-    const selectedChatId = useSelector(storeState => storeState.boardModule.selectedChatId)
+    const selectedChatIdx = useSelector(storeState => storeState.boardModule.selectedChatIdx)
     const [isCredentialMatched, setIsCredentialMatched] = useState(true)
-    const [selectedChat, setSelectedChat] = useState(null)
     const [filterBy, setFilterBy] = useState(chatService.getDefaultFilter())
     const [isArchive, setIsArchive] = useState(false)
 
 
-    useEffect(() => {
-        if (user) loadboard(user)
-    }, [user])
 
     useEffect(() => {
-        if (selectedChatId) {
-            let chatSelected = board.chats.filter(c => c.id === selectedChatId)[0]
-            setSelectedChat(chatSelected)
-        } else {
-            setSelectedChat(null)
+        if (user) {
+            loadboard(user)
+            socketService.on('board-updated', (newBoard) => {
+                setBoard(newBoard)
+            })
         }
-    }, [selectedChatId])
+
+        return ()=>{
+            socketService.off('board-updated')
+        }
+    }, [user])
 
     async function onLogin(credentials) {
         try {
@@ -61,29 +62,31 @@ export function ChatIndex() {
             isRead: "true"
         }
 
-        let boardToSave = await boardService.addMsg(board, selectedChat, msgToSave)
-        // console.log('boardToSave:', boardToSave)
+        let boardToSave = await boardService.addMsg(board, board.chats[selectedChatIdx], msgToSave)
+        const participant = await chatService.getChatReceiver(board.chats[selectedChatIdx], user._id)
+        const participantBoard = await boardService.query(participant)
+        await boardService.addMsg(participantBoard, board.chats[selectedChatIdx], msgToSave, false)
+
         try {
-            updateBoard(boardToSave)
-            boardService.updateParticipantBoard(board, selectedChat, msgToSave)
+            setBoard(boardToSave)
         } catch (err) {
             console.error('unable to save board', err)
         }
     }
 
     async function onDeleteChat() {
-        let boardToSave = boardService.deleteChat(board, selectedChatId)
-        const receiver = await chatService.getChatReceiver(selectedChat, user._id)
+        let boardToSave = boardService.deleteChat(board, board.chats[selectedChatIdx].id)
+        const receiver = await chatService.getChatReceiver(board.chats[selectedChatIdx], user._id)
         const receiverId = receiver._id
 
         try {
             updateBoard(boardToSave)
-            boardService.deleteChatFromUser(receiverId, selectedChatId)
+            boardService.deleteChatFromUser(receiverId, board.chats[selectedChatIdx].id)
         } catch (err) {
             console.error('unable to save board', err)
         } finally {
             try {
-                setSelectedChatId(null)
+                setSelectedChatIdx(null)
             } catch (err) {
                 console.error('cannot remove selected chat from store', err)
             }
@@ -93,7 +96,7 @@ export function ChatIndex() {
     async function onLogout() {
         try {
             await logout()
-            await setSelectedChatId(null)
+            await setSelectedChatIdx(null)
             console.log('byebye')
         } catch (err) {
             console.error('problem logging out:', err)
@@ -110,8 +113,17 @@ export function ChatIndex() {
     }
 
     async function onSelectChat(chat) {
-        setSelectedChatId(chat.id)
+        const selectedChatIdx = board.chats.findIndex(c => c.id === chat.id)
+        if (selectedChatIdx !== -1) {
+            setSelectedChatIdx(selectedChatIdx)
+        } else {
+            console.error(`cannot find specific chat with id ${chat.id}`)
+        }
 
+        readAll(chat)
+    }
+
+    async function readAll(chat){
         if (chat.messages.some(m => !m.isRead)) {
             const chatToSave = chatService.updateIsRead(chat)
             try {
@@ -129,7 +141,7 @@ export function ChatIndex() {
             } else {
                 setFilterBy((prevFilter) => { return { ...prevFilter, archive } })
             }
-            setSelectedChatId(null)
+            setSelectedChatIdx(null)
             return
         }
         if (unRead) {
@@ -145,21 +157,16 @@ export function ChatIndex() {
     }
 
     async function toggleChatArchive() {
-        await chatService.toggleArchive(selectedChatId)
-        setSelectedChatId(null)
+        await chatService.toggleArchive(board.chats[selectedChatIdx].id)
+        setSelectedChatIdx(null)
         loadboard(user)
     }
 
-    // function onClearChat(){
-    //     chatService.onClearChat()
-    // }
-
     async function onRemoveMsg(msgId) {
-        const boardToSave = await chatService.deleteMsg(board, selectedChat._id, msgId)
-        const participant = await chatService.getChatReceiver(selectedChat, user._id)
+        const boardToSave = await chatService.deleteMsg(board, board.chats[selectedChatIdx].id, msgId)
+        const participant = await chatService.getChatReceiver(board.chats[selectedChatIdx], user._id)
         const participantBoard = await boardService.query(participant)
-        await chatService.deleteMsg(participantBoard, selectedChat._id, msgId)
-        console.log('finished');
+        await chatService.deleteMsg(participantBoard, board.chats[selectedChatIdx].id, msgId, true)
         try {
             setBoard(boardToSave)
         } catch (err) {
@@ -181,12 +188,12 @@ export function ChatIndex() {
                     filterBy={filterBy}
                     onSetFilterby={onSetFilterby}
                     chats={board.chats}
-                    selectedChatId={selectedChat?.id}
+                    selectedChatId={board.chats[selectedChatIdx]?.id}
                     onSelectChat={onSelectChat}
                     onLogout={onLogout}
                     userId={user._id}
                 />}
-                {selectedChat ? <ChatDetails chat={selectedChat} onAddMsg={onAddMsg} userId={user._id} onDeleteChat={onDeleteChat} toggleChatArchive={toggleChatArchive} onRemoveMsg={onRemoveMsg} /> : <Hero />}
+                {selectedChatIdx !== null ? <ChatDetails readAll={readAll} chat={board.chats[selectedChatIdx]} onAddMsg={onAddMsg} userId={user._id} onDeleteChat={onDeleteChat} toggleChatArchive={toggleChatArchive} onRemoveMsg={onRemoveMsg} /> : <Hero />}
             </main>
         </div>
     )

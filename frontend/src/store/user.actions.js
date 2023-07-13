@@ -76,6 +76,7 @@ export async function loadUser(userId) {
 export async function updateUser(userToSave, key) {
     try {
         let savedUser = await userService.update(userToSave, key)
+
         store.dispatch({
             type: SET_USER,
             user:savedUser

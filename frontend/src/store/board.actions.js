@@ -16,12 +16,11 @@ export async function loadboard(user) {
     }
 }
 
-export async function setSelectedChatId(selectedChatId) {
+export async function setSelectedChatIdx(selectedChatIdx) {
     try {
         store.dispatch({
             type: SET_SELECTED_CHAT,
-            // doing it with extended method so i can send null 
-            selectedChatId:selectedChatId
+            selectedChatIdx:selectedChatIdx
         })
 
     } catch (err) {

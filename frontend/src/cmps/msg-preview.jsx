@@ -26,7 +26,7 @@ export function MsgPreview({ msg, userId, lastMsg, onRemoveMsg }) {
                 <div className="msg-optn-container flex align-center justify-center pointer" onClick={toggleModal}><IoIosArrowDown className='down-arrow' /></div>
                 <div className={"msg-txt"}>{msg.content}</div>
                 <div className="msg-time">{utilService.getTimeConversion(msg.timestamp)}</div>
-                {isModalOpen && <MsgOptionModal />}
+                {isModalOpen && <MsgOptionModal onDeleteMsg={onDeleteMsg} />}
             </section>
         )
     }

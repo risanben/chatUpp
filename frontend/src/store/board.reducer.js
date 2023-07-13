@@ -11,7 +11,7 @@ export const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
 
 const initialState = {
     board: null,
-    selectedChatId: null
+    selectedChatIdx: null
     // cart: [],
     // lastRemovedCar: null
 }
@@ -28,7 +28,7 @@ export function boardReducer(state = initialState, action) {
         //     newState = { ...state, board: action.board }
         //     break
         case SET_SELECTED_CHAT:
-            newState = { ...state, selectedChatId: action.selectedChatId }
+            newState = { ...state, selectedChatIdx: action.selectedChatIdx }
             break
         // case REMOVE_CAR:
         //     const lastRemovedCar = state.cars.find(car => car._id === action.carId)

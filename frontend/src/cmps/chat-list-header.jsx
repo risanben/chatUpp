@@ -40,7 +40,7 @@ export function ChatListHeader({ onLogout }) {
             <div className="user-btns-container pointer" onClick={toggleModal}>
                 <BiDotsVerticalRounded />
             </div>
-            {isUserModalOpen && <UserOptionModal pos={btnPos} onLogout={onLogout} />}
+            {isUserModalOpen && <UserOptionModal pos={btnPos} onLogout={onLogout}/>}
 
             <section className={`profile-container ${getProfileStatus()}`}>
                 <UserProfile currDimensions={currDimensions} toggleUserProfile={toggleUserProfile} user={loggedInUser}/>

@@ -1,4 +1,5 @@
 import { boardService } from "./board.service.local"
+import { socketService } from "./socket.service"
 import { userService } from "./user.service"
 // import { updateBoard } from '../store/board.actions'
 
@@ -9,7 +10,6 @@ export const chatService = {
   getVisiblePreviews,
   getMsgById,
   getDefaultFilter,
-  getArchivedCount,
   toggleArchive,
   deleteMsg
 }
@@ -23,23 +23,31 @@ function getMsgById(msgId, messages) {
   return res
 }
 
-async function deleteMsg(board, chatId, msgId) {
+async function deleteMsg(board, chatId, msgId,isParticipant = false) {
   const updatedBoard = { ...board }
-  const chatIndex = updatedBoard.chats.findIndex(c => c._id === chatId)
-  if (chatIndex !== -1) {
-    const updatedChat = { ...updatedBoard.chats[chatIndex] }
-    updatedChat.messages = updatedChat.messages.filter(msg => msg._id !== msgId);
-    updatedBoard.chats[chatIndex] = updatedChat;
-    await boardService.save(updatedBoard)
-    return updatedBoard;
+  const updatedChat = updatedBoard.chats.find(c => c.id === chatId)
+  const chatIdx = updatedBoard.chats.findIndex(c => c.id === chatId)
+  if (updatedChat && chatIdx !== -1) {
+    const msgToDeleteIdx = updatedChat.messages.findIndex(m => m.id === msgId)
+    if (msgToDeleteIdx !== -1) {
+      updatedChat.messages.splice(msgToDeleteIdx, 1)
+      updatedBoard.chats[chatIdx] = updatedChat
+
+      await boardService.save(updatedBoard)
+      if (isParticipant) socketService.emit('board-updated', updatedBoard)
+      return updatedBoard;
+    } else {
+      console.error('couldnt find message to delete ')
+    }
+  } else {
+    console.error('couldnt not find the chat to remove the msg from')
   }
-  return new Error('couldnt find the msg to remove')
 }
 
 async function toggleArchive(chatId) {
   try {
     let user = await userService.getLoggedinUser()
-    let userBoard = await boardService.query( user )
+    let userBoard = await boardService.query(user)
     let chatIdx = userBoard.chats.findIndex(c => c.id === chatId)
     if (chatIdx === -1) return new Error('cannot find chat')
 
@@ -66,14 +74,14 @@ function getDefaultFilter() {
   }
 }
 
-async function getArchivedCount() {
-  const user = userService.getLoggedinUser()
-  const userBoard = await boardService.query(user)
-  return userBoard.chats.reduce((acc, c) => {
-    if (c.isArchived) acc++
-    return acc
-  }, 0)
-}
+// async function getArchivedCount() {
+//   const user = userService.getLoggedinUser()
+//   const userBoard = await boardService.query(user)
+//   return userBoard.chats.reduce((acc, c) => {
+//     if (c.isArchived) acc++
+//     return acc
+//   }, 0)
+// }
 
 
 function getChatReceiver(chat, loggedUserId) {

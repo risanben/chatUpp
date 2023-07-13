@@ -12,12 +12,16 @@
     .optn-container {
         padding-top: 10px;
         padding-bottom: 10px;
-        padding-left: 30px;
         font-size: 17px;
-
-
+        
+        
         &:hover {
             background-color: $main-bg-color;
+        }
+        
+        &>*{
+            padding-left: 30px;
+
         }
     }
 }

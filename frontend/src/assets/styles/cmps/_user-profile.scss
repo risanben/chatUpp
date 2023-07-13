@@ -1,24 +1,24 @@
-.user-profile{
+.user-profile {
     // border: 2px solid red;
     // width: 100%;
     position: absolute;
     left: 0;
     top: 0;
     background-color: $main-bg-color;
-    
-    header{
-        background-color:$main-border-dark-clr;
+
+    header {
+        background-color: $main-border-dark-clr;
         height: 160px;
         padding-bottom: 20px;
         padding-left: 30px;
 
-        .arrow-icon{
+        .arrow-icon {
             font-size: 30px;
             color: white;
             margin-bottom: 4px;
         }
 
-        .head{
+        .head {
             margin-left: 30px;
             color: white;
             font-size: 24px;
@@ -27,20 +27,20 @@
         }
     }
 
-    .main-user-section{
+    .main-user-section {
         height: 100%;
-  
-        .user-avatar{
+
+        .user-avatar {
             margin-top: 50px;
             border: 1px solid $main-border-dark-clr;
         }
 
-        .img-input{
+        .img-input {
             display: none;
         }
     }
-    
-    .name-container{
+
+    .name-container {
         padding-left: 30px;
         margin-top: 50px;
         width: 100%;
@@ -48,16 +48,25 @@
         background-color: white;
         box-shadow: 0px 0px 8px 5px rgba(0, 73, 57, 0.068);
 
-        &>*{
+        &>* {
             height: 50px;
         }
+
         input,
-        &:focus{
+        &:focus {
             border: none;
             outline: none;
             font-size: 20px;
             color: $main-icons-color;
         }
     }
-}
 
+    .user-avatar:hover {
+        opacity: 0.5;
+    }
+
+    .note {
+        margin: 20px 30px;
+        color: #667781;
+    }
+}

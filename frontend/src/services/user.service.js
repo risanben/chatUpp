@@ -1,4 +1,4 @@
-import { storageService } from './async-storage.service'
+import { socketService } from './socket.service'
 import { httpService } from './http.service'
 
 const STORAGE_KEY_LOGGEDIN_USER = 'loggedinUser'
@@ -60,15 +60,10 @@ function remove(userId) {
 }
 
 async function update(userToUpdate, key) {
+    const requestBody = {key:key}
+    requestBody.value = userToUpdate[key]
+    return await httpService.put(`user/${userToUpdate._id}`, requestBody)
 
-    // const user = await storageService.get('user', userToUpdate._id)
-    // user[key] = userToUpdate[key]
-    // await storageService.put('user', user)
-
-    // const user = await httpService.put(`user/${userToUpdate._id}`, {_id, score})
-    // Handle case in which admin updates other user's details
-    // if (getLoggedinUser()._id === user._id) saveLocalUser(user)
-    // return user
 }
 
 async function login(userCred) {
@@ -78,7 +73,7 @@ async function login(userCred) {
     const user = await httpService.post('auth/login', userCred)
     // console.log('user:', user)
     if (user) {
-        // socketService.login(user._id)
+        socketService.login(user._id)
         return saveLocalUser(user)
     } else {
         throw new Error('couldnt find the user')
@@ -94,7 +89,7 @@ async function signup(userCred) {
 }
 async function logout() {
     sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER)
-    // socketService.logout()
+    socketService.logout()
     return await httpService.post('auth/logout')
 }
 

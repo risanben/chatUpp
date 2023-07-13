@@ -1,5 +1,6 @@
 import { storageService } from './async-storage.service.js'
 import { httpService } from './http.service.js'
+import { SOCKET_EVENT_BOARD_UPDATED, socketService } from './socket.service.js'
 import { userService } from './user.service.js'
 import { utilService } from './util.service.js'
 
@@ -218,15 +219,25 @@ async function save(board) {
     return savedBoard
 }
 
-async function addMsg(board, chat, msg) {
-    let boardToSave = { ...board }
-    let chatToSave = boardToSave.chats.find(c => c.id === chat.id)
-    chatToSave.messages.push(msg)
+async function addMsg(board, chat, msg, isRead = true) {
+    if (!isRead) {
+        msg = { ...msg, isRead }
+    }
+    const updatedBoard = { ...board }
+    const chatIndex = updatedBoard.chats.findIndex(c => c.id === chat.id)
 
-    let chatIdx = boardToSave.chats.findIndex(c => c.id === chat.id)
-    let cuttedChat = boardToSave.chats.splice(chatIdx, 1)
-    boardToSave.chats.unshift(cuttedChat[0])
-    return boardToSave
+    if (chatIndex !== -1) {
+        const updatedChat = { ...updatedBoard.chats[chatIndex] }
+        updatedChat.messages.push(msg)
+        updatedBoard.chats[chatIndex] = updatedChat
+    } else {
+        console.error('cannot find chat to add msg to')
+    }
+    await save(updatedBoard)
+    if (!isRead) {
+        socketService.emit(SOCKET_EVENT_BOARD_UPDATED, updatedBoard)
+    }
+    return updatedBoard
 }
 
 

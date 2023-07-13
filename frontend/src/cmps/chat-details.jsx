@@ -8,7 +8,7 @@ import { BiDotsVerticalRounded } from "react-icons/bi"
 import { ChatOption } from "./chat-options.jsx"
 
 
-export function ChatDetails({ chat, onAddMsg, userId , onDeleteChat, toggleChatArchive,onRemoveMsg}) {
+export function ChatDetails({ chat, onAddMsg, userId, onDeleteChat, toggleChatArchive, onRemoveMsg, readAll }) {
 
     const [participant, setParticipant] = useState(null)
     const [isOpen, setIsOpen] = useState(false)
@@ -16,6 +16,10 @@ export function ChatDetails({ chat, onAddMsg, userId , onDeleteChat, toggleChatA
     useEffect(() => {
         loadParticipant()
     }, [chat])
+
+    useEffect(() => {
+        readAll(chat)
+    }, [chat.messages.length])
 
     async function loadParticipant() {
         const participant = await chatService.getChatReceiver(chat, userId)
@@ -26,7 +30,7 @@ export function ChatDetails({ chat, onAddMsg, userId , onDeleteChat, toggleChatA
         setIsOpen((prev) => !prev)
     }
 
-    
+
 
 
     return (
@@ -39,7 +43,7 @@ export function ChatDetails({ chat, onAddMsg, userId , onDeleteChat, toggleChatA
                     <div className={`option-con flex align-center ${isOpen}`} onClick={toggleOption}>
                         <BiDotsVerticalRounded className="option-icon pointer" />
                     </div>
-                    {isOpen && <ChatOption onDeleteChat={onDeleteChat} chat={chat} toggleChatArchive={toggleChatArchive}/>}
+                    {isOpen && <ChatOption onDeleteChat={onDeleteChat} chat={chat} toggleChatArchive={toggleChatArchive} />}
                 </div>
             </div>
 
@@ -49,7 +53,7 @@ export function ChatDetails({ chat, onAddMsg, userId , onDeleteChat, toggleChatA
                 onRemoveMsg={onRemoveMsg}
             />
 
-            <ChatInput onAddMsg={onAddMsg} />
+            <ChatInput onAddMsg={onAddMsg} userId={userId} participant={participant} />
         </section>
     )
 }

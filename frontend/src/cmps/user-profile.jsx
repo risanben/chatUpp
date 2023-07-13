@@ -32,7 +32,7 @@ export function UserProfile({ currDimensions, toggleUserProfile, user }) {
         setUsernameToEdit(ev.target.value)
     }
 
-    function onChangeUsername(ev){
+    function onChangeUsername(ev) {
         if (ev) ev.preventDefault()
         let userToSave = { ...user, username: usernameToEdit }
         updateUser(userToSave, 'username')
@@ -66,6 +66,7 @@ export function UserProfile({ currDimensions, toggleUserProfile, user }) {
                         </form>
                     </div>
                 </div>
+                <span className="note">This is your username used to log in. Make sure you remember it in case of changing</span>
 
             </section>
         </div>
