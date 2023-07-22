@@ -1,13 +1,30 @@
 .chat-input {
     background-color: red;
     justify-self: flex-end;
-    height: 77px;
+    // height: 77px;
+    padding: 15px 20px;
     background-color: $main-bg-color;
+
+    .buttons-container {
+        button {
+            border-radius: 50%;
+            border: none;
+            height: 45px;
+            width: 45px;
+            margin: 0 10px;
+
+            .plus-icon {
+                font-size: 30px;
+                opacity: 0.6;
+            }
+        }
+    }
 
     form {
         flex-grow: 1;
-        height: 70%;
-  
+        height: 50px;
+        margin: 0 10px;
+
     }
 
     input {
@@ -19,7 +36,7 @@
         background-color: #fff;
         border-radius: 10px;
         margin: 0 10px;
-        color:#404a50fa;
+        color: #404a50fa;
 
         &:focus {
             outline: none;
@@ -28,8 +45,13 @@
     }
 
     .send-icon {
-        margin: 0 10px 0 20px;
+        // margin: 0 10px 0 20px;
         font-size: 30px;
+        opacity: 0.8;
+    }
+    .rec-icon {
+        // margin: 0 10px 0 20px;
+        font-size: 25px;
         opacity: 0.8;
     }
 

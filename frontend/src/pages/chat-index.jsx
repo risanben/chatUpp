@@ -18,6 +18,8 @@ import { socketService } from '../services/socket.service.js'
 import { storageService } from '../services/async-storage.service.js'
 import { store } from '../store/store.js'
 import { Loader } from './loader.jsx'
+import { userService } from '../services/user.service.js'
+import { Recording } from '../cmps/recording.jsx'
 
 export function ChatIndex() {
     const user = useSelector(storeState => storeState.userModule.user)
@@ -37,7 +39,7 @@ export function ChatIndex() {
             })
         }
 
-        return ()=>{
+        return () => {
             socketService.off('board-updated')
         }
     }, [user])
@@ -123,7 +125,7 @@ export function ChatIndex() {
         readAll(chat)
     }
 
-    async function readAll(chat){
+    async function readAll(chat) {
         if (chat.messages.some(m => !m.isRead)) {
             const chatToSave = chatService.updateIsRead(chat)
             try {
@@ -175,7 +177,7 @@ export function ChatIndex() {
     }
 
 
-
+return <Recording/>
     if (!user) return <LoginSignup onSignup={onSignup} onLogin={onLogin} isCredentialMatched={isCredentialMatched} setIsCredentialMatched={setIsCredentialMatched} />
     if (!board) return <Loader />
 

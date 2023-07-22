@@ -14,15 +14,20 @@ export function ChatList({ chats, onSelectChat, onLogout, userId, onSetFilterby,
     }, [filterBy, chats])
 
     function setChatsToDisplay() {
+        // debugger
         let filteredChats = [...chats]
+
         if (filterBy.txt) {
             const searchText = filterBy.txt.toLowerCase();
-            const regex = new RegExp(searchText, 'i')
-            filteredChats = filteredChats.filter(chat =>
-                chat.messages.some(message =>
-                    regex.test(message.content)
-                )
-            )
+            filteredChats = filteredChats.filter(chat => {
+                const messageContentRegex = new RegExp(searchText, 'i')
+                const hasMatchingMessage = chat.messages.some(message => messageContentRegex.test(message.content))
+
+                const participantUsernameRegex = new RegExp(searchText, 'i')
+                const hasMatchingParticipant = chat.participants.some(participant => participantUsernameRegex.test(participant.username))
+
+                return hasMatchingMessage || hasMatchingParticipant
+            })
         }
 
         if (filterBy.unRead === 'true') {

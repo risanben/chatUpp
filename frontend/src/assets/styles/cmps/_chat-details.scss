@@ -1,6 +1,7 @@
 .chat-details {
   background-color: $chat-bg-clr ;
   flex-grow: 1;
+  overflow: hidden;
 
   .chat-header {
     background-color: $main-bg-color;
@@ -48,6 +49,7 @@
 
   ::-webkit-scrollbar {
     width: 6px;
+    height: 100%;
   }
 
   /* Track */
